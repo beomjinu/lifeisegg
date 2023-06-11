@@ -2,17 +2,19 @@
 {% load static %}
 {% block content %}
 <div class="grid grid-cols-4 gap-8">
+    {% for product in products %}
     <a href="#">
         <div class="flex flex-col gap-1">
-            <img class="aspect-square" src="{% static 'deck.png' %}">
-            <div class="">
-                <p>[8.0, 8.25] BLUE HOOD</p>
+            <img class="aspect-square" src="{{ product.solted_images.first.image.url }}">
+            <div>
+                <p>{{ product.name }}</p>
                 <div class="flex gap-1 text-sm">
-                    <p class="text-blue">59,000원</p>
-                    <p class="text-gray"><del>61,000원</del></p>
+                    <p class="text-blue">{{ product.format_discounted}}원</p>
+                    <p class="text-gray"><del>{{ product.format_price }}원</del></p>
                 </div>
             </div>
         </div>
     </a>
+    {% endfor %}
 </div>
 {% endblock %}
