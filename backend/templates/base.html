@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        
+        <!-- font -->
+        <style> 
+            @font-face {
+                font-family: 'Pretendard-Regular';
+                src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+                font-weight: 400;
+                font-style: normal;
+            }
+        </style>
+    </head>
+    <body class="font-regular text-dark">
+        <div class="w-11/12 mx-auto h-screen">
+            <div class="flex justify-between h-12">
+                <a href="/shop/" class="flex items-center">
+                    <p class="text-2xl">LIFEISEGG.</p>
+                </a>
+                <a href="/cart/" class="flex items-center mx-2">
+                    <img class="w-[24px]" src="{% static 'cart.svg' %}">
+                </a>
+            </div>
+            <hr class="h-[1.5px] w-full bg-dark border-0 mb-4">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <footer>
+            hello    
+        </footer>
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            dark: '#121212',
+                            blue: '#0000ED',
+                            gray: '#555555',
+                        },
+                        fontFamily: {
+                            regular: ["Pretendard-Regular", "sans-serif"]
+                        }
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>
