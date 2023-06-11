@@ -15,22 +15,36 @@
             }
         </style>
     </head>
-    <body class="font-regular text-dark">
-        <div class="w-11/12 mx-auto h-screen">
+    <body class="font-regular text-dark w-11/12 mx-auto">
+        <div class="h-screen">
             <div class="flex justify-between h-12">
                 <a href="/shop/" class="flex items-center">
                     <p class="text-2xl">LIFEISEGG.</p>
                 </a>
                 <a href="/cart/" class="flex items-center mx-2">
-                    <img class="w-[24px]" src="{% static 'cart.svg' %}">
+                    <img class="w-[24px]" src="{% static 'cart.png' %}">
                 </a>
             </div>
-            <hr class="h-[1.5px] w-full bg-dark border-0 mb-4">
+            <div class="flex justify-start w-full mb-4">
+                <hr class="w-full h-[1.5px] bg-dark border-0">
+            </div>
             {% block content %}
             {% endblock %}
         </div>
-        <footer>
-            hello    
+        <footer class="text-[12px] my-4 text-gray">
+            <a target="_blank" href="https://pgweb.tosspayments.com/ms/escrow/s_escrowYn.do?mertid=lifeisb7i1">
+                <img class="h-6" src="{% static 'escrow.png' %}">
+            </a>
+            <div class="mt-2">
+                <p>상호: 라이프이즈에그 | 대표: 범진우 | 이메일: cs@lifeisegg.shop</p>
+                <p>주소: 경기도 용인시 수지구 대지로 139, 106-1004</p>
+                <p>사업자등록번호: 776-38-01128 | 통신판매: 제 2023-용인수지-0998 | 호스팅제공자: AWS amazon web service</p>
+                <div class="flex justify-evenly mt-2">
+                    <p>이용약관</p>
+                    <p>개인정보처리방침</p>
+                    <p>사업자정보확인</p>
+                </div>
+            </div>
         </footer>
         
         <script src="https://cdn.tailwindcss.com"></script>
@@ -41,7 +55,7 @@
                         colors: {
                             dark: '#121212',
                             blue: '#0000ED',
-                            gray: '#555555',
+                            gray: '#999999',
                         },
                         fontFamily: {
                             regular: ["Pretendard-Regular", "sans-serif"]
