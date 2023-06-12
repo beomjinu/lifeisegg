@@ -4,10 +4,10 @@
 <div class="w-11/12 max-w-[858px] h-full mx-auto">
     <div class="grid grid-cols-2 gap-4">
         <div class="flex flex-col gap-2">
-            <img class="w-full aspect-square object-cover" src="{{ product.solted_images.first.image.url }}">
+            <img id="main_image" class="w-full aspect-square object-cover" src="{{ product.solted_images.first.image.url }}">
             <div class="grid grid-cols-4 gap-1">
                 {% for image in product.solted_images %}
-                <img class="object-cover aspect-square w-full" src="{{ image.image.url }}">
+                <img onclick="change_main_image({{ image.id }})" class="object-cover aspect-square w-full cursor-pointer" src="{{ image.image.url }}">
                 {% endfor %}
             </div>
         </div>
@@ -128,5 +128,16 @@
         let element = document.getElementById("selected_option_html")
         element.innerHTML = html
     }
+
+    let images = []
+
+    {% for i in product.images.all %}
+    images.push('{{ i.image.url }}')
+    {% endfor %}
+
+    function change_main_image(image_id) {
+        document.getElementById("main_image").src = images[image_id-1]
+    }
+
 </script>
 {% endblock %}
