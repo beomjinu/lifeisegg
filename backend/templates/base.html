@@ -15,7 +15,7 @@
             }
         </style>
     </head>
-    <body class="font-regular text-dark w-11/12 mx-auto">
+    <body class="font-regular text-dark w-11/12 mx-auto relative">
         <div class="h-screen">
             <div class="flex justify-between h-12">
                 <a href="/shop/" class="flex items-center">
@@ -31,7 +31,7 @@
             {% block content %}
             {% endblock %}
         </div>
-        <footer class="text-[12px] my-4 text-gray">
+        <footer class="text-[12px] my-4 text-gray_3 h-full">
             <a target="_blank" href="https://pgweb.tosspayments.com/ms/escrow/s_escrowYn.do?mertid=lifeisb7i1">
                 <img class="h-6" src="{% static 'escrow.png' %}">
             </a>
@@ -55,7 +55,10 @@
                         colors: {
                             dark: '#121212',
                             blue: '#0000ED',
-                            gray: '#999999',
+                            gray_1: '#F9F9F9',
+                            gray_2: '#303030',
+                            gray_3: '#999999'
+                            
                         },
                         fontFamily: {
                             regular: ["Pretendard-Regular", "sans-serif"]

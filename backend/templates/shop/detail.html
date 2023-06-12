@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="w-11/12 max-w-[858px] h-full mx-auto">
+    <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col gap-2">
+            <img class="w-full aspect-square object-cover" src="{{ product.solted_images.first.image.url }}">
+            <div class="grid grid-cols-4 gap-1">
+                {% for image in product.solted_images %}
+                <img class="object-cover aspect-square w-full" src="{{ image.image.url }}">
+                {% endfor %}
+            </div>
+        </div>
+        <div>
+            <div class="w-11/12 mx-auto p-2">
+                <p class="text-3xl">{{ product.name }}</p>
+                <div class="flex gap-2 text-2xl my-4">
+                    <p class="text-blue">{{ product.format_discounted }}원</p>
+                    <p class="text-gray_3"><del>{{ product.format_price }}원</del></p>
+                </div>
+                <div class="flex gap-2 mt-4">
+                    <img title="Freepik - Flaticon" class="w-8" src="{% static 'shipped.png' %}">
+                    <p class="flex items-center text-sm">무료 배송 상품입니다.</p>
+                </div>
+                <div class="mt-12 w-1/2">
+                    <select onchange="select_option()" id="options" class="border border-dark text-dark text-sm rounded-lg block w-full p-2.5">
+                        <option value="NONE" selected>옵션을 선택하세요.</option>
+                        {% for option in product.solted_options %}
+                        <option value="{{ option.id }}">+{{ option.price }}원 | {{ option.content }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="flex flex-col gap-4 min-h-32 mt-28">
+                    <div class="flex flex-col gap-1 text-sm" id="selected_option_html">
+                    </div>
+                    <div class="flex justify-between h-12 w-full mt-4">
+                        <button class="w-[49%] rounded-full bg-dark text-white hover:bg-gray duration-500">구매하기</button>
+                        <button class="w-[49%] rounded-full border border-dark hover:bg-dark hover:text-white duration-500">장바구니</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let option_list = []
+    {% for option in product.options.all %}
+    option_list.push(
+        {
+            "id": parseInt('{{ option.id }}'),
+            "content": '{{ option.content }}',
+            "price": parseInt('{{ option.price }}'),
+            "is_sold_out": ('{{ option.is_sold_out }}' == 'True') ? true : false
+        }
+    )
+    {% endfor %}
+
+    let selected_option = []
+
+    function add_option(product_id, quantity=1) {
+        let overlap = false;
+
+        if (selected_option.length != 0) {
+            for (let i in selected_option) {
+                if (selected_option[i][0].id == product_id) {
+                    selected_option[i][1] += quantity
+                    
+                    if (selected_option[i][1] <= 0) {
+                        delete_option(product_id)
+                    }
+
+                    overlap = true
+                }
+            }
+        }
+
+        if (overlap != true) {
+            selected_option.push([option_list[product_id - 1], 1])
+        }
+
+        set_options_html()
+    }
+
+    function delete_option(product_id) {
+        selected_option = selected_option.filter(function(item) {
+            return item[0].id !== product_id;
+        });
+
+        set_options_html()
+    }
+
+    function select_option() {
+        let element = document.getElementById("options");
+
+        add_option(element.value)
+        element.value = "NONE"
+    }
+
+    let product_discounted = parseInt('{{ product.discounted }}')
+
+    function set_options_html() {
+        let html = ""
+
+        for (let i in selected_option) {
+            html += `
+                <div class="relative rounded-sm bg-gray_1 h-20 p-2">
+                    <button onclick="delete_option(${selected_option[i][0].id})" class="text-gray_3 absolute right-2 h-[6.5px] w-[6.5px] leading-[6.5px] flex flex-col">⨯</button>
+                    <div class="flex justify-between w-full h-full">
+                        <div class="flex flex-col justify-between h-full">
+                            <p>${selected_option[i][0].content}</p>
+                            <div class="flex items-center h-8 border border-gray_3 w-24 rounded-lg text-gray_3">
+                                <button onclick="add_option(${selected_option[i][0].id})" class="w-8 h-full border-r border-gray_3 flex items-center justify-center">
+                                    +
+                                </button>
+                                <div class="w-8 h-full flex items-center justify-center text-dark">
+                                    ${selected_option[i][1]}
+                                </div>
+                                <button onclick="add_option(${selected_option[i][0].id}, -1)" class="w-8 h-full flex items-center justify-center border-l border-gray_3">
+                                    -
+                                </button>
+                                </div>
+                            </div>
+                        <p class="flex items-center">${ ((product_discounted + selected_option[i][0].price) * selected_option[i][1]).toLocaleString() }원</p>
+                    </div>
+                </div>
+            `
+        }
+        let element = document.getElementById("selected_option_html")
+        element.innerHTML = html
+    }
+</script>
+{% endblock %}
