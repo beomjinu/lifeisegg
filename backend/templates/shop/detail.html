@@ -75,13 +75,19 @@
         }
 
         if (overlap != true) {
-            selected_option.push([option_list[product_id - 1], 1])
+            let option = option_list.find(function(item) {
+                return item.id === product_id;
+            });
+
+            selected_option.push([option, 1])
         }
 
         set_options_html()
     }
 
     function delete_option(product_id) {
+        product_id = parseInt(product_id)
+
         selected_option = selected_option.filter(function(item) {
             return item[0].id !== product_id;
         });
@@ -92,7 +98,7 @@
     function select_option() {
         let element = document.getElementById("options");
 
-        add_option(element.value)
+        add_option(parseInt(element.value))
         element.value = "NONE"
     }
 
@@ -132,11 +138,19 @@
     let images = []
 
     {% for i in product.images.all %}
-    images.push('{{ i.image.url }}')
+    images.push({
+        "id": parseInt("{{ i.id }}"),
+        "url": "{{ i.image.url }}"
+    })
     {% endfor %}
 
     function change_main_image(image_id) {
-        document.getElementById("main_image").src = images[image_id-1]
+        image_id = parseInt(image_id)
+
+        image = images.find(function(item) {
+            return item.id === image_id;
+        }); 
+        document.getElementById("main_image").src = image.url
     }
 
 </script>
