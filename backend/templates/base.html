@@ -16,7 +16,7 @@
         </style>
     </head>
     <body class="font-regular text-dark w-11/12 mx-auto relative">
-        <div class="h-screen">
+        <div class="h-full min-h-screen">
             <div class="flex justify-between h-12">
                 <a href="{% url 'shop:index' %}" class="flex items-center">
                     <p class="text-2xl">LIFEISEGG.</p>
@@ -37,7 +37,7 @@
             </a>
             <div class="mt-2">
                 <p>상호: 라이프이즈에그 | 대표: 범진우 | 이메일: cs@lifeisegg.shop</p>
-                <p>주소: 경기도 용인시 수지구 대지로 139, 106-1004</p>
+                <p>주소: 경기도 용인시 수지구 대지로 139, 106-1004 | 개인정보관리책임자: 범진우</p>
                 <p>사업자등록번호: 776-38-01128 | 통신판매: 제 2023-용인수지-0998 | 호스팅제공자: AWS amazon web service</p>
                 <div class="flex justify-evenly mt-2">
                     <a href="{% url 'terms:policy' %}">이용약관</a>
@@ -67,5 +67,12 @@
                 }
             }
         </script>
+        <script>
+            (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
+          
+            ChannelIO('boot', {
+              "pluginKey": "0fc3c832-9032-4ad2-9fd4-f8f3be1b8ae7"
+            });
+          </script>
     </body>
 </html>
