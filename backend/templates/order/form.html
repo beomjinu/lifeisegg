@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class='w-11/12 max-w-[720px] h-full mx-auto'>
+    <div class='flex flex-col gap-10'>
+        <div>
+            <p class="text-2xl font-bold">주문 상품</p>
+            <div class="flex flex-col gap-2 mt-5">
+                {% for option in order_product %}
+                <div class="h-32 flex gap-4">
+                    <img class='h-full aspect-square' src='{% static 'deck.png' %}'>
+                    <div class='flex flex-col justify-center gap-2'>
+                        <p class='text-xl'>{{ option.product.name }} | {{ option.content }}</p>
+                        <p class=''>{{ option.quantity }}개 / {{ option.format_price }}원</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div>
+            <p class="text-2xl font-bold">주문자</p>
+
+            <div class="grid gap-6 mb-6 md:grid-cols-2 mt-4">
+                <div>
+                    <label for="orderer_name" class="text-sm font-medium">이름</label>
+                    <input type="text" id="orderer_name" class="h-12 bg-gray_1 rounded-lg w-full p-3" placeholder="이름을 입력해주세요." required>
+                </div>
+                <div>
+                    <label for="orderer_number" class="text-sm font-medium">휴대전화 번호</label>
+                    <input oninput='oninputPhone(this)' type="text" id="orderer_number" class="h-12 bg-gray_1 rounded-lg w-full p-3" placeholder="010-4903-7586" required>
+                </div>
+            </div>
+            <div>
+                <label for="orderer_email" class="text-sm font-medium">이메일 주소</label>
+                <input type="email" id="orderer_email" class="h-12 bg-gray_1 rounded-lg w-full p-3" placeholder="ex@example.com" required>
+            </div>
+        </div>
+        <div>
+            <p class="text-2xl font-bold">배송지</p>
+            <div class="flex my-3">
+                <div class="flex items-center h-5">
+                    <input onclick="same_orderer(this)" type="checkbox" class="w-4 h-4 border border-gray_3 rounded bg-gray-50">
+                </div>
+                <label for="same_orderer" class="ml-2 text-sm font-medium">주문자 정보와 동일</label>
+            </div>
+            <div class="grid gap-6 mb-6 md:grid-cols-2">
+                <div>
+                    <label for="recipient_name" class="text-sm font-medium">이름</label>
+                    <input type="text" id="recipient_name" class="h-12 bg-gray_1 rounded-lg w-full p-3" placeholder="이름을 입력해주세요." required>
+                </div>
+                <div>
+                    <label for="recipient_number" class="text-sm font-medium">휴대전화 번호</label>
+                    <input oninput='oninputPhone(this)' type="text" id="recipient_number" class="h-12 bg-gray_1 rounded-lg w-full p-3" placeholder="010-4903-7586" required>
+                </div>
+            </div>
+            <div class='flex flex-col gap-2'>
+                <label for="address" class="text-sm font-medium">주소</label>
+                <div class='flex justify-between'>
+                    <input type="text" id="address" class="h-12 bg-gray_1 rounded-lg w-[75%] p-3" placeholder="우측 검색하기 버튼을 눌러주세요." required disabled>
+                    <button onclick='daum_post_code()' class="w-[24%] border border-blue text-blue rounded-lg hover:text-white hover:bg-blue duration-500">검색하기</button>
+                </div>
+                <div>
+                    <input type="text" id="address_detail" class="h-12 bg-gray_1 rounded-lg w-full p-3" placeholder="상세 주소를 입력해주세요." required>
+                </div>
+            </div>
+        </div>
+        <div>
+            <label for="request" class="text-sm font-medium">요청 사항 (선택)</label>
+            <input type="text" id="request" class="h-12 bg-gray_1 rounded-lg w-full p-3" placeholder="요청 사항을 입력해주세요.">
+        </div>
+    </div>
+</div>
+<div id="layer" class='fixed overflow-hidden rounded-lg'></div>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function oninputPhone(target) {
+        target.value = target.value
+            .replace(/[^0-9]/g, '')
+            .replace(/(^02.{0}|^01.{1}|[0-9]{3,4})([0-9]{3,4})([0-9]{4})/g, "$1-$2-$3");
+    }
+
+    function same_orderer(target) {
+        if (target.checked) {
+            document.getElementById('recipient_name').value   = document.getElementById('orderer_name').value
+            document.getElementById('recipient_number').value = document.getElementById('orderer_number').value
+        }
+        else {
+            document.getElementById('recipient_name').value   = ''
+            document.getElementById('recipient_number').value = ''
+        }
+    }
+
+    let daum_post_is_closed = true;
+
+    function close_daum_post() {
+        document.getElementById('layer').style.display = 'none';
+        daum_post_is_closed = true;
+    }
+
+    function daum_post_code() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                let address = '';
+                var extra_address = '';
+
+                if (data.userSelectedType === 'R') {
+                    address = data.roadAddress;
+                } 
+
+                else {
+                    address = data.jibunAddress;
+                }
+
+                if (data.userSelectedType === 'R') {
+                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                        extra_address += data.bname;
+                    }
+
+                    if (data.buildingName !== '' && data.apartment === 'Y') {
+                        extra_address += (extra_address !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+
+                    if (extra_address !== '') {
+                        extra_address = '(' + extra_address + ')';
+                    }
+                
+                } 
+
+                document.getElementById("address").value = data.zonecode + ' ' + address + ' ' + extra_address;
+                document.getElementById("address_detail").focus();
+
+                close_daum_post()
+            },
+            width : '100%',
+            height : '100%',
+            maxSuggestItems : 5
+        }).embed(document.getElementById('layer'));
+        
+        document.getElementById('layer').style.display = 'block'
+        daum_post_is_closed = false;
+        init_layer_position();
+    }
+
+    function init_layer_position() {
+        if (daum_post_is_closed != true) {
+            let width = 350;
+            let height = 500;
+            let border_width = 1;
+    
+            document.getElementById('layer').style.width  = width + 'px';
+            document.getElementById('layer').style.height = height + 'px';
+            document.getElementById('layer').style.border = border_width + 'px solid';
+    
+            document.getElementById('layer').style.left = ((window.innerWidth - width)/2 - border_width) + 'px';
+            document.getElementById('layer').style.top = ((window.innerHeight - height)/2 - border_width) + 'px';
+        }
+    }
+
+    window.addEventListener("resize", function() {
+        init_layer_position()
+    })
+</script>
+{% endblock %}
