@@ -2,6 +2,7 @@ from django.db import models
 from shop.models import Option
 
 class Order(models.Model):
+    order_id         = models.CharField(max_length=99, null=True, blank=True)
     orderer_name     = models.CharField(max_length=99)
     orderer_number   = models.CharField(max_length=99)
     orderer_email    = models.EmailField(max_length=99)
@@ -10,7 +11,7 @@ class Order(models.Model):
     address          = models.CharField(max_length=99)
     request          = models.CharField(max_length=99, null=True, blank=True)
     created_at       = models.DateTimeField(auto_now_add=True)
-    delivery        = models.CharField(max_length=99, null=True, blank=True)
+    delivery         = models.CharField(max_length=99, null=True, blank=True)
     
     status_choices   = (
         ('WFP', 'WAITING_FOR_PAYMENT'),
