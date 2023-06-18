@@ -10,4 +10,5 @@ urlpatterns = [
     path('', redirect_index),
     path('terms/', include("terms.urls")),
     path('order/', include("order.urls")),
+    path('payment/', include('payment.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

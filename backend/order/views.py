@@ -1,6 +1,6 @@
-from django.shortcuts import render, get_object_or_404, HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
 from shop.models import Option
-from .models import Order
+from .models import Order, Item
 import base64, json, string, random
 
 def form(request):
@@ -23,10 +23,19 @@ def form(request):
         order.order_id         = str(order.id) + ''.join(random.choice('xyzXYZ') for _ in range(2)) + ''.join(random.choice(string.ascii_lowercase[:-3] + string.ascii_uppercase[-3]) for _ in range(random.randint(11, 18)))
         order.save()
 
-        return HttpResponse(order.order_id)
+        for i in options:
+            option = get_object_or_404(Option, pk=int(i))
+
+            item = Item()
+            item.order    = get_object_or_404(Order, pk=order.id)
+            item.content  = option.product.name + ' | ' + option.content
+            item.price    = option.product.discounted + option.price
+            item.quantity = options[i]['quantity']
+            item.save() 
+
+        return redirect('payment:payment', order_id=order.order_id)
     
     else:
-
         order_product = []
 
         for i in options:
