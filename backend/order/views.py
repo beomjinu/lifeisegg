@@ -33,7 +33,7 @@ def form(request):
             item.quantity = options[i]['quantity']
             item.save() 
 
-        return redirect('payment:payment', order_id=order.order_id)
+        return redirect('payment:open', order_id=order.order_id)
     
     else:
         order_product = []

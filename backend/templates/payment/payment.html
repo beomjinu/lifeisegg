@@ -1,3 +1,41 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class='w-11/12 max-w-[480px] h-screen mx-auto mt-20'>
+    <div class='flex flex-col gap-5'>
+        <p class='text-2xl'>결제하기</p>
+        <div class='flex flex-col gap-5'>
+            <div>
+                <label for="orderer_name" class="text-sm font-medium">이름</label>
+                <input type="text" id="orderer_name" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.orderer_name }}' disabled>
+            </div>
+            <div>
+                <label for="order_name" class="text-sm font-medium">결제 항목</label>
+                <input type="text" id="order_name" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.order_name }}' disabled>
+            </div>
+            <div>
+                <label for="amount" class="text-sm font-medium">결제 금액</label>
+                <input type="text" id="amount" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.format_amount }}원' disabled>
+            </div>
+        </div>
+        <button class='w-full h-12 rounded-full border border-blue text-blue mt-10' onclick='open_payments()'>결제창 다시 열기</button>
+    </div>
+</div>
+<script src="https://js.tosspayments.com/v1/payment"></script>
+<script>
+    let client_key = 'test_ck_5GePWvyJnrKRgZa1qo1VgLzN97Eo'
+    let payments = TossPayments(client_key)
+    
+    function open_payments() {
+        payments.requestPayment('CARD', {
+            amount: parseInt('{{ order.amount }}'),
+            orderId: '{{ order.order_id }}',
+            orderName: '{{ order.order_name }}',
+            customerName: '{{ order.orderer_name }}',
+            successUrl: 'http://' + window.location.host + '/' + '{% url 'payment:success' %}',
+            failUrl: 'http://' + window.location.host + '/' + '{% url 'payment:fail' %}',
+        })
+    }
+
+    open_payments()
+</script>
 {% endblock %}
