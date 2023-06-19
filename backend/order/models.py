@@ -23,10 +23,17 @@ class Order(models.Model):
 
     status           = models.CharField(max_length=99, choices=status_choices)
 
-
 class Item(models.Model):
     order    = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     content  = models.CharField(max_length=99)
     price    = models.PositiveIntegerField()
     quantity = models.PositiveIntegerField()
-    
+
+    def format_price(self):
+        return format(self.price, ',')
+
+    def total_price(self):
+        return self.price * self.quantity
+
+    def format_total_price(self):
+        return format(self.total_price(), ',')

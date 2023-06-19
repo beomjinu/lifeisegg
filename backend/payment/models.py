@@ -6,3 +6,6 @@ class Payment(models.Model):
     amount      = models.PositiveIntegerField()
     status      = models.CharField(max_length=99)
     created_at  = models.DateTimeField(auto_now_add=True)
+
+    def format_amount(self):
+        return format(self.amount, ',')

@@ -166,7 +166,7 @@
                 }
             }
             
-            location.href = '/order/form?data=' + btoa(JSON.stringify(options))
+            location.href = '{% url 'order:form' %}' + '?data=' + btoa(JSON.stringify(options))
         }
     }
 

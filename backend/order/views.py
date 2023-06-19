@@ -37,25 +37,25 @@ def form(request):
 
             item = Item()
             item.order    = get_object_or_404(Order, pk=order.id)
-            item.content  = option.product.name + ' | ' + option.content
-            item.price    = option.product.discounted + option.price
+            item.content  = option.full_content()
             item.quantity = options[i]['quantity']
+            item.price    = option.total_price()
             item.save() 
 
         return redirect('payment:open', order_id=order.order_id)
     
     else:
-        order_product = []
+        order_items = []
 
         for i in options:
             option = get_object_or_404(Option, pk=int(i))
             option.quantity = options[i]["quantity"]
-            option.format_price = format((option.price + option.product.discounted) * option.quantity, ',')
+            option.format_sum_price = format(option.total_price() * option.quantity, ',')
 
-            order_product.append(option)
+            order_items.append(option)
 
         context = {
-            'order_product': order_product
+            'order_items': order_items
         }
 
         return render(request, 'order/form.html', context)

@@ -10,7 +10,7 @@ def open(request, order_id):
     if order.status != 'WFP':
         return HttpResponse('order.status is not WFP: 이미 결제 완료된 주문입니다.')
     
-    order.amount = sum([item.price * item.quantity for item in order.items.all()])
+    order.amount = sum([item.total_price() for item in order.items.all()])
     order.format_amount = format(order.amount, ',')
     order.order_name = order.items.all()[0].content + (('외 ' + str(len(order.items.all()) - 1) + '개') if (len(order.items.all()) - 1) != 0 else '')
 
