@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render, HttpResponse
+from django.shortcuts import get_object_or_404, render, HttpResponse, redirect
 from order.models import Order
 from .models import Payment
 import http.client, base64, json, os
@@ -54,7 +54,7 @@ def success(request):
     order.status = 'DP'
     order.save()
 
-    return HttpResponse(json.dumps(data))
+    return redirect('order:inquiry', order_id=order_id)
 
 def fail(request):
     return HttpResponse(request.GET.get('code') + ':' + request.GET.get('message') + ':' + request.GET.get('orderId'))

@@ -5,4 +5,5 @@ app_name = 'order'
 
 urlpatterns = [
     path('form/', views.form, name='form'),
+    path('<str:order_id>', views.inquiry, name='inquiry'),
 ]

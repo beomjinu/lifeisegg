@@ -3,6 +3,15 @@ from shop.models import Option
 from .models import Order, Item
 import base64, json, string, random
 
+def inquiry(request, order_id):
+    order = get_object_or_404(Order, order_id=order_id)
+
+    context = {
+        'order': order
+    }
+
+    return render(request, 'order/inquiry.html', context)
+
 def form(request):
     data = request.GET.get('data')
     options = json.loads(base64.b64decode(data).decode('ascii'))
