@@ -9,3 +9,6 @@ class Payment(models.Model):
 
     def format_amount(self):
         return format(self.amount, ',')
+    
+    def korean_created_at(self):
+        return self.created_at.strftime("%Y년 %m월 %d일 %H시 %M분")

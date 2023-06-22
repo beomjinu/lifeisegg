@@ -23,6 +23,9 @@ class Order(models.Model):
 
     status           = models.CharField(max_length=99, choices=status_choices)
 
+    def korean_created_at(self):
+        return self.created_at.strftime("%Y년 %m월 %d일 %H시 %M분")
+
 class Item(models.Model):
     order    = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     content  = models.CharField(max_length=99)

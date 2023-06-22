@@ -6,6 +6,12 @@ import base64, json, string, random
 def inquiry(request, order_id):
     order = get_object_or_404(Order, order_id=order_id)
 
+    status = {
+        'DP': '결제가 완료되었습니다.'
+    }
+
+    order.status = status[order.status]
+
     context = {
         'order': order
     }
@@ -25,11 +31,12 @@ def form(request):
         order.orderer_email    = post_data.get('orderer_email')
         order.recipient_name   = post_data.get('recipient_name')
         order.recipient_number = post_data.get('recipient_number')
-        order.address          = post_data.get('address') + post_data.get('address_detail')
+        order.address          = post_data.get('address') + ' ' + post_data.get('address_detail')
         order.request          = post_data.get('request')
         order.status           = 'WFP'
+        order.delivery         = ''
         order.save()
-        order.order_id         = str(order.id) + ''.join(random.choice('xyzXYZ') for _ in range(2)) + ''.join(random.choice(string.ascii_lowercase[:-3] + string.ascii_uppercase[-3]) for _ in range(random.randint(11, 18)))
+        order.order_id         = str(order.id) + ''.join(random.choice('xyzXYZ') for _ in range(2)) + ''.join(random.choice(string.ascii_lowercase[:-3] + string.ascii_uppercase[:-3]) for _ in range(random.randint(11, 18)))
         order.save()
 
         for i in options:

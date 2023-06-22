@@ -1,20 +1,68 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class='w-11/12 max-w-[720px] h-full mx-auto mb-20'>
-    <div>
-        <p class="text-2xl font-bold">주문 상품</p>
-        <div class="flex flex-col gap-2 mt-5">
-            {% for item in order.items.all %}
-            <div class="h-24 w-full p-4 flex flex-col gap-4 bg-gray_1 rounded-lg">
-                <div class=' rounded-lg bg-gray_1'>
-                    <div class='flex flex-col justify-center gap-2'>
-                        <p class='text-xl'>{{ item.content }}</p>
-                        <p class=''>{{ item.quantity }}개 / {{ item.format_total_price }}원</p>
+    <div class='flex flex-col gap-10 my-8'>
+        <p class='text-4xl font-bold text-blue'>{{ order.status }}</p>
+        <div>
+            <p class="text-xl font-bold">주문 상품</p>
+            <div class="flex flex-col gap-2 mt-3">
+                {% for item in order.items.all %}
+                <div class="h-24 w-full p-4 flex flex-col gap-4 bg-gray_1 rounded-lg">
+                    <div class=' rounded-lg bg-gray_1'>
+                        <div class='flex flex-col justify-center gap-2'>
+                            <p class='text-xl'>{{ item.content }}</p>
+                            <p class=''>{{ item.quantity }}개 / {{ item.format_total_price }}원</p>
+                        </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+        </div>
+        <div class='flex flex-col gap-4'>
+            <p class='text-xl font-bold'>주문 정보</p>
+            <div class=''>
+                <label class="text-sm font-medium">주문 일시</label>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.korean_created_at }}' disabled>
+            </div>
+            <div>
+                <label class="text-sm font-medium">주문자</label>
+                <div class='gap-4 grid grid-cols-2'>
+                    <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.orderer_name }}' disabled>
+                    <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.orderer_number }}' disabled>
+                </div>
+                <input type="text" class="mt-2 h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.orderer_email }}' disabled>
+            </div>
+            <div>
+                <label class="text-sm font-medium">배송지</label>
+                <div class='gap-4 grid grid-cols-2'>
+                    <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.recipient_name }}' disabled>
+                    <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.recipient_number }}' disabled>
+                </div>
+                <input type="text" class="mt-2 h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.address }}' disabled>
+            </div>
+            <div>
+                <label class="text-sm font-medium">요청 사항</label>
+                <input type="text" class="mt-2 h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.request }}' placeholder='요청 사항이 비어있습니다.' disabled>
+            </div>
+        </div>
+        <div>
+            <p class='text-xl font-bold'>결제 정보</p>
+            <div class='my-2'>
+                <label class="text-sm font-medium">결제 금액</label>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.format_amount }}원' disabled>
+            </div>
+            <div class='my-2'>
+                <label class="text-sm font-medium">결제 일시</label>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.korean_created_at }}' disabled>
+            </div>
+        </div>
+        <div>
+            <p class='text-xl font-bold'>배송 정보</p>
+            <div class='my-2'>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.delivery }}' placeholder='아직 배송이 시작되지 않았습니다.' disabled>
+            </div>
         </div>
     </div>
+    <p class='text-blue text-sm'>* 현재 페이지의 url을 공유하지 마십시오.</p>
 </div>
 {% endblock %}
