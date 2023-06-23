@@ -35,7 +35,7 @@
                     </div>
                     <div class="flex justify-between h-12 w-full mt-4">
                         <button onclick="buy()" class="w-[49%] rounded-full bg-dark text-white hover:bg-gray duration-500">구매하기</button>
-                        <button class="w-[49%] rounded-full border border-dark hover:bg-dark hover:text-white duration-500">장바구니</button>
+                        <button onclick='cart()' class="w-[49%] rounded-full border border-dark hover:bg-dark hover:text-white duration-500">장바구니</button>
                     </div>
                 </div>
             </div>
@@ -153,9 +153,9 @@
         document.getElementById("main_image").src = image.url
     }
 
-    function buy() {
+    function get_selected_option() {
         if (selected_option.length == 0) {
-            alert('옵션을 선택하세요.')
+            return null
         }
         else {
             let options = {}
@@ -165,8 +165,69 @@
                     quantity: selected_option[i][1]
                 }
             }
-            
-            location.href = '{% url 'order:form' %}' + '?data=' + btoa(JSON.stringify(options))
+
+            return options
+        }
+
+    }
+
+    function data_encode(data) {
+        return btoa(JSON.stringify(data))
+    }
+
+    function data_decode(data) {
+        return JSON.parse(atob(data))
+    }
+
+    function buy() {
+        options = get_selected_option()
+        if (!options) {
+            alert('옵션을 선택하세요.')
+        }
+        else {
+            location.href = '{% url 'order:form' %}' + '?data=' + data_encode(options)
+        }
+    }
+
+    function set_cookie(key, value) {
+        document.cookie = key + '=' + value + '; path=/;';
+    }
+
+    function get_cookie(key) {
+        return document.cookie.split("; ")
+        .find(cookie => cookie.startsWith(key + "="))
+        ?.split("=")[1] || null;
+    }
+
+
+    function cart() {
+        options = get_selected_option()
+
+        if (!options) {
+            alert('옵션을 선택하세요.')
+        }
+        else {
+            if (!get_cookie('cart')) {
+                set_cookie('cart', data_encode(options))
+            }
+            else {
+                let cart_data = data_decode(get_cookie('cart'))
+    
+                for (i in options) {
+                    if (cart_data.hasOwnProperty(i)) {
+                        cart_data[i]['quantity'] += options[i]['quantity']
+                    }
+                    else {
+                        cart_data[i] = options[i]
+                    }
+                }
+    
+                set_cookie('cart', data_encode(cart_data))
+                
+            }
+            if (confirm('장바구니에 상품이 담겼습니다. 이동하시겠습니까?')) {
+                location.href = ''
+            }
         }
     }
 
