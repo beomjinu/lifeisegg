@@ -1,3 +1,119 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
+{% if cart_cookie == None %}
+<p>장바구니가 비어있습니다.</p>
+{% else %}
+<div class="mx-auto w-11/12 mt-10">
+    <p class='text-3xl font-bold'>장바구니</p>
+    <div class='flex justify-between my-4'>
+        <div class='flex flex-col gap-4 w-[70%]'>
+            {% for item in items %}
+            <div id='id-{{ item.id }}' class='flex justify-between'>
+                <div class='w-full'>
+                    <div class="relative rounded-lg bg-gray_1 h-40">
+                        <button onclick="set_item('{{ item.id }}', -{{ item.quantity }})" class="text-gray_3 absolute right-2 h-[6.5px] w-[6.5px] leading-[6.5px] flex flex-col m-2">⨯</button>
+                        <div class="flex justify-between w-full h-full">
+                            <div class='flex gap-8'>
+                                <img src='{{ item.product.images.first.image.url }}' class='aspect-square object-cover h-full rounded-l-lg'>
+                                <div class="flex flex-col justify-center gap-2 h-full">
+                                    <p class='text-xl'>{{ item.full_content }}</p>
+                                    <div class='flex gap-1'>
+                                        <p id='result_price-{{ item.id }}'></p>
+                                        <p>/</p>
+                                        <p id='item_quantity-{{ item.id }}'></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='flex items-center h-full mx-10'>
+                                <div class="flex items-center h-8 border border-gray_3 w-24 rounded-lg text-gray_3">
+                                    <button onclick="set_item('{{ item.id }}', 1)" class="w-8 h-full border-r border-gray_3 flex items-center justify-center">
+                                        +
+                                    </button>
+                                    <div id='quantity-{{ item.id }}' class="w-8 h-full flex items-center justify-center text-dark">
+                                    </div>
+                                    <button onclick="set_item('{{ item.id }}', -1)" class="w-8 h-full flex items-center justify-center border-l border-gray_3">
+                                        -
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class='w-[28%]'>
+            <div class='flex flex-col gap-2 w-full'>
+                <div class='flex justify-between text-2xl'>
+                    <p>총 상품 금액</p>
+                    <p id='total_price' class='text-blue'></p>
+                </div>
+                <div class='flex justify-between text-2xl'>
+                    <p>배송비</p>
+                    <p class='text-blue'>무료</p>
+                </div>
+            </div>
+            <button onclick='buy()' class='rounded-full text-blue border border-blue h-12 text my-12 w-full'>구매하기</button>
+        </div>
+    </div>
+</div>
+<script src='{% static 'cookie.js' %}'></script>
+<script>
+    let cart_data = data_decode(get_cookie('cart'))
+
+    let items = {}
+    {% for item in items %}
+    items['{{ item.id }}'] = {
+        'quantity': {{ item.quantity }},
+        'price': {{ item.total_price }}
+    }
+    {% endfor %}
+
+    function set_items_element() {
+        let total_price = 0
+
+        for (id in items) {
+            document.getElementById('quantity-' + id).innerText = items[id]['quantity']
+            document.getElementById('item_quantity-' + id).innerText = items[id]['quantity'] + '개'
+
+            let result_price = items[id]['quantity'] * items[id]['price']
+            total_price += result_price
+
+            document.getElementById('result_price-' + id).innerText = result_price.toLocaleString() + '원'
+        }
+
+        document.getElementById('total_price').innerText = total_price.toLocaleString() + '원'
+
+    }
+
+    function set_item(id, i) {
+        if (items[id]['quantity'] + i < 1) {
+            delete cart_data[id]
+            delete items[id]
+            document.getElementById('id-' + id).remove()   
+        }
+        else {
+            items[id]['quantity'] += i
+            cart_data[id]['quantity'] += i
+        }
+
+        if (Object.entries(cart_data).length == 0) {
+            delete_cookie('cart')
+            location.reload()
+        }
+
+        else {
+            set_cookie('cart', data_encode(cart_data))
+            set_items_element()
+        }
+    }
+
+    function buy() {
+        location.href = location.href = '{% url 'order:form' %}' + '?data=' + data_encode(cart_data)
+    }
+
+    set_items_element()
+</script>
+{% endif %}
 {% endblock %}

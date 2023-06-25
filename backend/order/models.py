@@ -1,5 +1,4 @@
 from django.db import models
-from shop.models import Option
 
 class Order(models.Model):
     order_id         = models.CharField(max_length=99, null=True, blank=True)
