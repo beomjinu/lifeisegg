@@ -12,6 +12,7 @@ def index(request):
         product.solted_images = product.images.all().order_by('priority')
 
     context = {
+        'title': 'LIFEISEGG - SHOP',
         'products': products
     }
 
@@ -24,6 +25,7 @@ def detail(request, product_id):
     product.solted_options    = product.options.all().order_by('priority')
 
     context = {
+        'title': product.name,
         'product': product,
     }
 

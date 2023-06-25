@@ -21,6 +21,7 @@ def open(request, order_id):
     payment.save()
 
     context = {
+        'title': 'LIFEISEGG - 결제하기',
         'order': order,
     }
 

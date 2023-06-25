@@ -13,6 +13,7 @@ def inquiry(request, order_id):
     order.status = status[order.status]
 
     context = {
+        'title': 'LIFEISEGG - 주문 조회',
         'order': order
     }
 
@@ -62,6 +63,7 @@ def form(request):
             order_items.append(option)
 
         context = {
+            'title': 'LIFEISEGG - 주문하기',
             'order_items': order_items
         }
 
