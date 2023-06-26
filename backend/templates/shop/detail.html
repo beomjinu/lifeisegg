@@ -22,12 +22,14 @@
                     <img title="Freepik - Flaticon" class="w-8" src="{% static 'shipped.png' %}">
                     <p class="flex items-center text-sm">무료 배송 상품입니다.</p>
                 </div>
-                <div class="mt-12 w-full sm:w-1/2">
-                    <select onchange="select_option()" id="options" class="border border-dark text-dark text-sm rounded-lg block w-full p-2.5">
+                <div class="mt-12 w-full sm:w-1/2 relative cursor-pointer">
+                    <p class='absolute right-2 top-[6px] z-50'>⌵</p>
+                    <select onchange="select_option()" id="options" class="cursor-pointer appearance-none border border-dark text-dark text-sm rounded-lg block w-full p-2.5">
                         <option value="NONE" selected>옵션을 선택하세요.</option>
                         {% for option in product.solted_options %}
                         <option value="{{ option.id }}">+{{ option.price }}원 | {{ option.content }}</option>
                         {% endfor %}
+                        
                     </select>
                 </div>
                 <div class="flex flex-col gap-4 min-h-32 mt-10 sm:mt-28">
