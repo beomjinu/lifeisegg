@@ -23,6 +23,7 @@ def open(request, order_id):
     context = {
         'title': 'LIFEISEGG - 결제하기',
         'order': order,
+        'toss_ck': settings.TOSS_CK,
     }
 
     return render(request, 'payment/payment.html', context)
@@ -39,7 +40,7 @@ def success(request):
     
     conn = http.client.HTTPSConnection('api.tosspayments.com')
     payload    = json.dumps({'paymentKey': payment_key, 'amount': int(amount), 'orderId': order_id})
-    toss_sk    = os.environ.get('toss_sk')
+    toss_sk    = settings.TOSS_SK
 
     headers = {
         'Authorization': "Basic " + base64.b64encode((toss_sk + ":").encode("utf-8")).decode("ascii"),
