@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 class Product(models.Model):
     name        = models.CharField(max_length=99)
@@ -15,6 +16,9 @@ class Product(models.Model):
 
     def format_discounted(self):
         return format(self.discounted, ',')
+    
+    def get_absolute_url(self):        
+        return reverse('shop:detail', kwargs={'product_id': self.id})
 
 class Option(models.Model):
     product     = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='options')
