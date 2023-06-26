@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  django:
+    build:
+      context: ./django
+      dockerfile: Dockerfile
+    volumes:
+      - ./django:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      - django
+    volumes:
+      - static_volume:/usr/share/nginx/html/static
+      - media_volume:/usr/share/nginx/html/media
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./data:/var/lib/postgresql/data
+volumes:
+  static_volume:
+  media_volume:
