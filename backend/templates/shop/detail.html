@@ -19,7 +19,7 @@
                     <p class="text-gray_3"><del>{{ product.format_price }}원</del></p>
                 </div>
                 <div class="flex gap-2 mt-4">
-                    <img title="Freepik - Flaticon" class="w-8" src="{% static 'shipped.png' %}">
+                    <img title="Freepik - Flaticon" class="w-8" src="{% static 'image/shipped.png' %}">
                     <p class="flex items-center text-sm">무료 배송 상품입니다.</p>
                 </div>
                 <div class="mt-12 w-full sm:w-1/2 relative cursor-pointer">
@@ -44,7 +44,7 @@
         </div>
     </div>
 </div>
-<script src='{% static 'cookie.js' %}'></script>
+<script src='{% static 'js/cookie.js' %}'></script>
 <script>
     let option_list = []
     {% for option in product.options.all %}

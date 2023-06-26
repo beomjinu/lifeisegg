@@ -5,11 +5,12 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <title>{{ title }}</title>
+        <link rel="shortcut icon" href='{% static 'image/favicon.ico' %}'/>
         <!-- font -->
         <style> 
             @font-face {
                 font-family: 'Pretendard-Regular';
-                src: url('{% static 'Pretendard-Regular.woff' %}') format('woff');
+                src: url('{% static 'font/Pretendard-Regular.woff' %}') format('woff');
                 font-weight: 400;
                 font-style: normal;
             }
@@ -44,7 +45,7 @@
                     <p class="text-2xl">LIFEISEGG.</p>
                 </a>
                 <a href="{% url 'cart:index' %}" class="flex items-center mx-2">
-                    <img class="w-[24px]" src="{% static 'cart.png' %}">
+                    <img class="w-[24px]" src="{% static 'image/cart.png' %}">
                 </a>
             </div>
             <div class="flex justify-start w-full mb-4">
@@ -55,7 +56,7 @@
         </div>
         <footer class="text-[8px] text-center sm:text-left sm:text-[12px] mb-8 mt-20 sm:mt-10 text-gray_3 h-full">
             <a target="_blank" href="https://pgweb.tosspayments.com/ms/escrow/s_escrowYn.do?mertid=lifeisb7i1">
-                <img class="h-4 sm:h-6" src="{% static 'escrow.png' %}">
+                <img class="h-4 sm:h-6" src="{% static 'image/escrow.png' %}">
             </a>
             <div class="">
                 <p>상호: 라이프이즈에그 | 대표: 범진우 | 이메일: cs@lifeisegg.shop</p>
