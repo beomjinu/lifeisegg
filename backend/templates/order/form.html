@@ -13,7 +13,7 @@
                     <div class="h-32 flex gap-4">
                         <img class='h-full aspect-square object-cover' src='{{ item.product.images.all.first.image.url }}'>
                         <div class='flex flex-col justify-center gap-2'>
-                            <p class='text-xl'>{{ item.full_content }}</p>
+                            <p class='text-md sm:text-xl'>{{ item.full_content }}</p>
                             <p class=''>{{ item.quantity }}개 / {{ item.format_sum_price }}원</p>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                     <label for="address" class="text-sm font-medium">주소</label>
                     <div class='flex justify-between'>
                         <input type="text" id="address" name='address' class="h-12 bg-gray_1 rounded-lg w-[75%] p-3" placeholder="우측 검색하기 버튼을 눌러주세요." required readonly>
-                        <button type='button' onclick='daum_post_code()' class="w-[24%] border border-blue text-blue rounded-lg">검색하기</button>
+                        <button type='button' onclick='daum_post_code()' class="w-[24%] border border-blue text-blue rounded-lg text-sm sm:text-base">검색하기</button>
                     </div>
                     <div>
                         <input type="text" id='address_detail' name='address_detail' class="h-12 bg-gray_1 rounded-lg w-full p-3" placeholder="상세 주소를 입력해주세요." required>
@@ -72,9 +72,9 @@
             </div>
         </div>
         <div class='mt-14'>
-            <p>동의 사항인 <a target='_blank' href='{% url 'terms:policy' %}' class='text-blue'>이용약관</a>과 <a target='_blank' href='{% url 'terms:privacy' %}' class='text-blue'>개인정보처리방침</a>을 확인하신 후 아래 '동의 및 결제하기'를 눌러주세요.</p>
+            <p class='text-sm sm:text-base'>동의 사항인 <a target='_blank' href='{% url 'terms:policy' %}' class='text-blue'>이용약관</a>과 <a target='_blank' href='{% url 'terms:privacy' %}' class='text-blue'>개인정보처리방침</a>을 확인하신 후 아래 '동의 및 결제하기'를 눌러주세요.</p>
         </div>
-        <button type='submit' class='w-full h-16 mt-10 border border-blue rounded-full text-blue text-xl'>동의 및 결제하기</button>
+        <button type='submit' class='w-full h-12 sm:h-16 mt-10 border border-blue rounded-full text-blue text-md sm:text-xl'>동의 및 결제하기</button>
     </form>
 </div>
 <div id="layer" class='fixed overflow-hidden rounded-lg'></div>
@@ -152,6 +152,13 @@
         if (daum_post_is_closed != true) {
             let width = 350;
             let height = 500;
+
+            if (window.innerWidth < 420) {
+                console.log(true)
+                width = window.innerWidth - 1
+                height = window.innerHeight - 1
+            }
+            
             let border_width = 1;
     
             document.getElementById('layer').style.width  = width + 'px';

@@ -30,7 +30,7 @@ SECRET_KEY = env('django_sk')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('debug')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.ngrok-free.app', '127.0.0.1']
 
 
 # Application definition
