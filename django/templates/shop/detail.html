@@ -24,10 +24,14 @@
                 </div>
                 <div class="mt-12 w-full sm:w-1/2 relative cursor-pointer">
                     <p class='absolute right-2 top-[6px] z-50'>⌵</p>
-                    <select onchange="select_option()" id="options" class="cursor-pointer appearance-none border border-dark text-dark text-sm rounded-lg block w-full p-2.5">
+                    <select onchange="select_option()" id="options" class="cursor-pointer appearance-none border border-dark text-dark bg-white text-sm rounded-lg block w-full p-2.5">
                         <option value="NONE" selected>옵션을 선택하세요.</option>
                         {% for option in product.solted_options %}
-                        <option value="{{ option.id }}">+{{ option.price }}원 | {{ option.content }}</option>
+                        {% if option.is_sold_out %}
+                        <option value="{{ option.id }}" disabled>+{{ option.format_price }}원 | {{ option.content }} (품절)</option>
+                        {% else %}
+                        <option value="{{ option.id }}">+{{ option.format_price }}원 | {{ option.content }}</option>
+                        {% endif %}
                         {% endfor %}
                         
                     </select>
@@ -36,8 +40,12 @@
                     <div class="flex flex-col gap-1 text-sm" id="selected_option_html">
                     </div>
                     <div class="flex justify-between h-12 w-full mt-4">
+                        {% if product.is_sold_out %}
+                        <button class="w-full rounded-full text-blue border border-blue cursor-not-allowed">품절된 상품입니다.</button>
+                        {% else %}
                         <button onclick="buy()" class="w-[49%] rounded-full bg-dark text-white hover:bg-gray duration-500">구매하기</button>
                         <button onclick='cart()' class="w-[49%] rounded-full border border-dark hover:bg-dark hover:text-white duration-500">장바구니</button>
+                        {% endif %}
                     </div>
                 </div>
             </div>

@@ -17,6 +17,9 @@ class Product(models.Model):
     def format_discounted(self):
         return format(self.discounted, ',')
     
+    def is_sold_out(self):
+        return all([option.is_sold_out for option in self.options.all()])
+    
     def get_absolute_url(self):        
         return reverse('shop:detail', kwargs={'product_id': self.id})
 
