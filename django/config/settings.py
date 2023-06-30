@@ -17,6 +17,7 @@ SECRET_KEY = os.environ.get('django_sk')
 DEBUG = True if os.environ.get('debug') == 'True' else False
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS=['https://*.lifeisegg.shop']
 
 TOSS_CK = os.environ.get('toss_ck')
 TOSS_SK = os.environ.get('toss_sk')
