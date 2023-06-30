@@ -27,7 +27,7 @@ services:
     volumes:
       - static_volume:/usr/share/nginx/html/static
       - media_volume:/usr/share/nginx/html/media
-      - /etc/letsencrypt:/etc/letsencrypt/
+      - /etc/letsencrypt:/etc/letsencrypt
 
   db:
     image: postgres
