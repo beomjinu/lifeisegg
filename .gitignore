@@ -1,6 +1,6 @@
 media/
 *.pem
-
+data
 # Created by https://www.toptal.com/developers/gitignore/api/python,venv,django,macos,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,venv,django,macos,visualstudiocode
 
