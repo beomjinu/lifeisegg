@@ -5,7 +5,7 @@ class Product(models.Model):
     name        = models.CharField(max_length=99)
     price       = models.PositiveIntegerField()
     discounted  = models.PositiveIntegerField()
-    post        = models.TextField(default='')
+    description = models.TextField(default='')
     priority    = models.IntegerField()
 
     def __str__(self):
