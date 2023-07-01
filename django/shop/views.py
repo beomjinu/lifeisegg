@@ -25,8 +25,9 @@ def detail(request, product_id):
     product.solted_options    = product.options.all().order_by('priority')
 
     context = {
-        'title': product.name,
+        'title': 'LIFEISEGG - ' + product.name,
         'product': product,
+        'og_img_url': product.solted_images.first().image.url
     }
 
     return render(request, 'shop/detail.html', context=context)
