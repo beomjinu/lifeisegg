@@ -3,6 +3,7 @@ from app.order.models import Order
 from .models import Payment
 import http.client, base64, json, os
 from django.conf import settings
+from modules import alimtalk
 
 def open(request, order_id):
     order = get_object_or_404(Order, order_id=order_id)
@@ -55,6 +56,21 @@ def success(request):
     order.payment.save()
     order.status = 'DP'
     order.save()
+
+    message = alimtalk.Message()
+    message.create_send_data(
+        {
+            "to": order.orderer_number.replace("-", ""),
+            "template": "주문접수",
+
+            "var": {
+                "#{amount}": format(int(amount), ",") + "원",
+                "#{orderNumber}": order_id
+            }
+        }
+    )
+    message.send()
+
 
     return redirect('order:inquiry', order_id=order_id)
 

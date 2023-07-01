@@ -22,6 +22,10 @@ CSRF_TRUSTED_ORIGINS=['https://*.lifeisegg.shop']
 TOSS_CK = os.environ.get('toss_ck')
 TOSS_SK = os.environ.get('toss_sk')
 
+SOLAPI_CK = os.environ.get('SOLAPI_CK')
+SOLAPI_SK = os.environ.get('SOLAPI_SK')
+SOLAPI_PFID = os.environ.get('SOLAPI_PFID')
+ALIMTALK_FROM_NUMBER = os.environ.get('ALIMTALK_FROM_NUMBER')
 # Application definition
 
 INSTALLED_APPS = [
