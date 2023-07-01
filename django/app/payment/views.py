@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render, HttpResponse, redirect
-from order.models import Order
+from app.order.models import Order
 from .models import Payment
 import http.client, base64, json, os
 from django.conf import settings

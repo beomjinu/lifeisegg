@@ -4,10 +4,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 
-from shop.views import redirect_index
+from app.shop.views import redirect_index
 
-from shop.sitemaps import ProductSitemap
-from terms.sitemaps import TermsSitemap
+from app.shop.sitemaps import ProductSitemap
+from app.terms.sitemaps import TermsSitemap
 
 sitemaps = {
     'Product': ProductSitemap,
@@ -19,12 +19,12 @@ urlpatterns = [
     path('adminpage/', admin.site.urls),
     
     # apps
-    path('shop/', include("shop.urls")),
+    path('shop/', include("app.shop.urls")),
     path('', redirect_index), # redirect shop/
-    path('terms/', include("terms.urls")),
-    path('order/', include("order.urls")),
-    path('payment/', include('payment.urls')),
-    path('cart/', include('cart.urls')),
+    path('terms/', include("app.terms.urls")),
+    path('order/', include("app.order.urls")),
+    path('payment/', include('app.payment.urls')),
+    path('cart/', include('app.cart.urls')),
     
     # sitemaps
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),

@@ -1,5 +1,5 @@
 from django.db import models
-from order.models import Order
+from app.order.models import Order
 
 class Payment(models.Model):
     order       = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='payment')
