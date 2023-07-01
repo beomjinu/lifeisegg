@@ -1,7 +1,13 @@
 from django.shortcuts import render
 
 def policy(request):
-    return render(request, 'terms/policy.html')
+    context = {
+        'title': 'LIFEISEGG - 이용약관'
+    }
+    return render(request, 'terms/policy.html', context)
 
 def privacy(request):
-    return render (request, 'terms/privacy.html')
+    context = {
+        'title': 'LIFEISEGG - 개인정보처리방침'
+    }
+    return render (request, 'terms/privacy.html', context)
