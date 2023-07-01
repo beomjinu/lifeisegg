@@ -41,7 +41,7 @@
                     </div>
                     <div class="flex justify-between h-12 w-full mt-4">
                         {% if product.is_sold_out %}
-                        <button class="w-full rounded-full text-blue border border-blue cursor-not-allowed">품절된 상품입니다.</button>
+                        <button class="w-full rounded-full bg-gray_2 text-white cursor-not-allowed">품절된 상품입니다.</button>
                         {% else %}
                         <button onclick="buy()" class="w-[49%] rounded-full bg-dark text-white hover:bg-gray duration-500">구매하기</button>
                         <button onclick='cart()' class="w-[49%] rounded-full border border-dark hover:bg-dark hover:text-white duration-500">장바구니</button>
