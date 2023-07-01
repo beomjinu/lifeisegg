@@ -2,7 +2,9 @@
 {% load static %}
 {% block content %}
 {% if cart_cookie == None %}
-<p>장바구니가 비어있습니다.</p>
+<div class='flex justify-center'>
+    <p class='text-2xl'>장바구니가 비어있습니다.</p>
+</div>
 {% else %}
 <div class="mx-auto w-full lg:w-11/12 mt-10">
     <p class='text-3xl font-bold'>장바구니</p>
