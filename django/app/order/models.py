@@ -10,7 +10,6 @@ class Order(models.Model):
     address          = models.CharField(max_length=99)
     request          = models.CharField(max_length=99, null=True, blank=True)
     created_at       = models.DateTimeField(auto_now_add=True)
-    delivery         = models.CharField(max_length=99, null=True, blank=True)
     
     status_choices   = (
         ('WFP', 'WAITING_FOR_PAYMENT'),
@@ -39,3 +38,11 @@ class Item(models.Model):
 
     def format_total_price(self):
         return format(self.total_price(), ',')
+    
+class Delivery(models.Model):
+    order   = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='delivery')
+    company = models.CharField(max_length=99)
+    number  = models.CharField(max_length=99)
+    done    = models.BooleanField(default=False)
+    start   = models.DateField()
+    end     = models.DateField(null=True, blank=True)
