@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 <div class="w-full md:w-11/12 max-w-[858px] h-full mx-auto">
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="flex flex-col gap-2">
             <img id="main_image" class="w-full aspect-square object-cover" src="{{ product.solted_images.first.image.url }}">
             <div class="grid grid-cols-4 gap-1">
@@ -12,15 +12,18 @@
             </div>
         </div>
         <div>
-            <div class="w-full sm:w-11/12 mx-auto sm:p-2">
+            <div class="w-full md:w-11/12 mx-auto sm:p-2">
                 <p class="text-3xl">{{ product.name }}</p>
-                <div class="flex gap-2 text-2xl my-4">
+                <div class="flex gap-2 text-2xl my-2">
                     <p class="text-blue">{{ product.format_discounted }}원</p>
                     <p class="text-gray_3"><del>{{ product.format_price }}원</del></p>
                 </div>
-                <div class="flex gap-2 mt-4">
+                <div class="flex gap-2 mt-6">
                     <img title="Freepik - Flaticon" class="w-8" src="{% static 'image/shipped.png' %}">
                     <p class="flex items-center text-sm">무료 배송 상품입니다.</p>
+                </div>
+                <div class='my-6 text-sm'>
+                    {{ product.description|safe }}
                 </div>
                 <div class="mt-12 w-full sm:w-1/2 relative cursor-pointer">
                     <p class='absolute right-2 top-[6px] z-50'>⌵</p>
@@ -33,10 +36,9 @@
                         <option value="{{ option.id }}">+{{ option.format_price }}원 | {{ option.content }}</option>
                         {% endif %}
                         {% endfor %}
-                        
                     </select>
                 </div>
-                <div class="flex flex-col gap-4 min-h-32 mt-10 sm:mt-28">
+                <div class="flex flex-col gap-4 min-h-32 mt-6">
                     <div class="flex flex-col gap-1 text-sm" id="selected_option_html">
                     </div>
                     <div class="flex justify-between h-12 w-full mt-4">
