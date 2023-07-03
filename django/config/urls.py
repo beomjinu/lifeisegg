@@ -25,6 +25,7 @@ urlpatterns = [
     path('order/', include("app.order.urls")),
     path('payment/', include('app.payment.urls')),
     path('cart/', include('app.cart.urls')),
+    path('nimda/', include('app.nimda.urls')), # new admin
     
     # sitemaps
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
