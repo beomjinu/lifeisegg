@@ -65,7 +65,7 @@ def success(request):
 
             "var": {
                 "#{amount}": format(int(amount), ",") + "원",
-                "#{orderNumber}": order_id
+                "#{order_id}": order_id
             }
         }
     )

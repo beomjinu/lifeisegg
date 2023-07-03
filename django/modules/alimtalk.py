@@ -18,7 +18,7 @@ class Message:
         }
 
         self.templates = {
-            '주문접수': 'KA01TP230424081257629bCfpZ6Ellq3'
+            '주문접수': 'KA01TP230701162116367VjEPEehkl6I'
         }        
     
     def get_iso_datetime(self):
