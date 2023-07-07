@@ -2,7 +2,7 @@
 {% block content %}
 <div class='w-full md:w-11/12 max-w-[720px] h-full mx-auto mb-20'>
     <div class='flex flex-col gap-10 my-8'>
-        <p class='text-4xl font-bold text-blue'>{{ order.status }}</p>
+        <p class='text-4xl font-bold text-blue'>{{ order.display_status }}</p>
         <div>
             <p class="text-xl font-bold">주문 상품</p>
             <div class="flex flex-col gap-2 mt-3">
@@ -42,25 +42,42 @@
             </div>
             <div>
                 <label class="text-sm font-medium">요청 사항</label>
-                <input type="text" class="mt-2 h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.request }}' placeholder='요청 사항이 비어있습니다.' disabled>
+                {% if order.request %}
+                <input type="text" class="mt-2 h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.request }}' disabled>                
+                {% else %}
+                <input type="text" class="mt-2 h-12 bg-gray_1 rounded-lg w-full p-3" placeholder='요청 사항이 비어있습니다.' disabled>
+                {% endif %}
             </div>
         </div>
         <div>
             <p class='text-xl font-bold'>결제 정보</p>
+            {% if order.status != 'WFP' %}
             <div class='my-2'>
                 <label class="text-sm font-medium">결제 금액</label>
-                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.format_amount }}원' disabled>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.format_amount }}원' disabled>
             </div>
             <div class='my-2'>
                 <label class="text-sm font-medium">결제 일시</label>
-                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.korean_created_at }}' disabled>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.get_korean_apat }}' disabled>
             </div>
+            {% else %}
+            <div class='my-2'>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" placeholder='아직 결제가 완료되지 않았습니다.' disabled>
+            </div>
+            {% endif %}
         </div>
         <div>
             <p class='text-xl font-bold'>배송 정보</p>
+            {% if order.delivery %}
             <div class='my-2'>
-                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.delivery }}' placeholder='아직 배송이 시작되지 않았습니다.' disabled>
+                <label class="text-sm font-medium">운송장 번호</label>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.delivery }}' disabled>
             </div>
+            {% else %}
+            <div class='my-2'>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" placeholder='아직 배송이 시작되지 않았습니다.' disabled>
+            </div>
+            {% endif %}
         </div>
     </div>
     <p class='text-blue text-sm'>* 현재 페이지의 url을 공유하지 마십시오.</p>

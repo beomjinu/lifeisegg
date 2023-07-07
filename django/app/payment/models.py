@@ -1,14 +1,20 @@
 from django.db import models
 from app.order.models import Order
+from datetime import datetime
+import json, base64
 
 class Payment(models.Model):
     order       = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='payment')
-    amount      = models.PositiveIntegerField()
-    status      = models.CharField(max_length=99)
-    created_at  = models.DateTimeField(auto_now_add=True)
+    data        = models.TextField(null=True, blank=True)
 
-    def format_amount(self):
-        return format(self.amount, ',')
+    def get_data(self):
+        return json.loads(base64.b64decode(self.data.encode('utf-8')).decode('utf-8')) 
     
-    def korean_created_at(self):
-        return self.created_at.strftime("%Y년 %m월 %d일 %H시 %M분")
+    def get_approved_at(self):
+        return datetime.strptime(self.get_data()['approvedAt'], '%Y-%m-%dT%H:%M:%S%z')
+
+    def get_simple_apat(self):
+        return self.get_approved_at().strftime('%y.%m.%d %H:%M')       
+    
+    def get_korean_apat(self):
+        return self.get_approved_at().strftime('%Y년 %m월 %d일 %H시 %M분')  

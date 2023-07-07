@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'app.order',
     'app.payment',
     'app.cart',
-    'app.nimda', # new admin
 ]
 
 MIDDLEWARE = [

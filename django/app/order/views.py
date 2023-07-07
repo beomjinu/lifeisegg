@@ -6,12 +6,6 @@ import base64, json, string, random
 def inquiry(request, order_id):
     order = get_object_or_404(Order, order_id=order_id)
 
-    status = {
-        'DP': '결제가 완료되었습니다.'
-    }
-
-    order.status = status[order.status]
-
     context = {
         'title': 'LIFEISEGG - 주문 조회',
         'order': order

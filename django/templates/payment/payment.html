@@ -10,7 +10,7 @@
             </div>
             <div>
                 <label for="order_name" class="text-sm font-medium">결제 항목</label>
-                <input type="text" id="order_name" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.order_name }}' disabled>
+                <input type="text" id="order_name" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.simple_items }}' disabled>
             </div>
             <div>
                 <label for="amount" class="text-sm font-medium">결제 금액</label>
@@ -29,7 +29,7 @@
         payments.requestPayment('CARD', {
             amount: parseInt('{{ order.amount }}'),
             orderId: '{{ order.order_id }}',
-            orderName: '{{ order.order_name }}',
+            orderName: '{{ order.simple_items }}',
             customerName: '{{ order.orderer_name }}',
             successUrl: 'http://' + window.location.host + '/' + '{% url 'payment:success' %}',
             failUrl: 'http://' + window.location.host + '/' + '{% url 'payment:fail' %}',
