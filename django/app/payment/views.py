@@ -26,11 +26,11 @@ def success(request):
 
     order = get_object_or_404(Order, order_id=order_id)
 
-    if int(amount) != order.amount():
+    if int(amount) != order.get_amount():
         return HttpResponse('요청한 결제 금액과 실제 결제 금액이 다릅니다.')
     
     conn = http.client.HTTPSConnection('api.tosspayments.com')
-    payload    = json.dumps({'paymentKey': payment_key, 'amount': order.amount(), 'orderId': order_id})
+    payload    = json.dumps({'paymentKey': payment_key, 'amount': order.get_amount(), 'orderId': order_id})
     toss_sk    = settings.TOSS_SK
 
     headers = {
@@ -56,7 +56,7 @@ def success(request):
             "template": "주문접수",
 
             "var": {
-                "#{amount}": format(order.amount(), ",") + "원",
+                "#{amount}": format(order.get_amount(), ",") + "원",
                 "#{order_id}": order.order_id
             }
         }

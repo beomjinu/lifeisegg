@@ -38,9 +38,9 @@ def form(request):
 
             item = Item()
             item.order    = get_object_or_404(Order, pk=order.id)
-            item.content  = option.full_content()
+            item.content  = str(option)
             item.quantity = options[i]['quantity']
-            item.price    = option.total_price()
+            item.price    = option.get_total_price()
             item.save() 
 
         return redirect('payment:open', order_id=order.order_id)
@@ -51,7 +51,7 @@ def form(request):
         for i in options:
             option = get_object_or_404(Option, pk=int(i))
             option.quantity = options[i]["quantity"]
-            option.format_sum_price = format(option.total_price() * option.quantity, ',')
+            option.format_sum_price = format(option.get_total_price() * option.quantity, ',')
 
             order_items.append(option)
 

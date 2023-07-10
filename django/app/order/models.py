@@ -15,23 +15,19 @@ class Order(models.Model):
     status_choices   = (
         ('WFP', 'WAITING_FOR_PAYMENT'),
         ('DP', 'DONE_PAYMENT'),
-        ('IPD', 'IN_PROGRESS_DELIVERY'),
-        ('DD', 'DONE_DELIVERY'),
+        ('DS', 'DONE_SEND'),
         ('C', 'CANCLED'),
     )
 
     status           = models.CharField(max_length=99, choices=status_choices)
 
-    def korean_created_at(self):
+    def get_kr_created_at(self):
         return self.created_at.strftime("%Y년 %m월 %d일 %H시 %M분")
     
-    def simple_created_at(self):
-        return self.created_at.strftime("%y.%m.%d %H:%M")
-    
-    def simple_items(self):
+    def get_simple_items(self):
         return self.items.all()[0].content + (('외 ' + str(len(self.items.all()) - 1) + '개') if (len(self.items.all()) - 1) != 0 else '')
 
-    def display_status(self):
+    def get_display_status(self):
         return {
             'WFP': '결제를 기다리고 있습니다.',
             'DP': '결제가 완료되었습니다.',
@@ -40,20 +36,11 @@ class Order(models.Model):
             'C': '취소된 주문입니다.'
         }[self.status]
     
-    def simple_display_status(self):
-        return {
-            'WFP': '결제 대기',
-            'DP': '결제 완료',
-            'IPD': '배송 중',
-            'DD': '배송 완료',
-            'C': '취소'
-        }[self.status]
-    
-    def amount(self):
-        return sum([item.total_price() for item in self.items.all()])
+    def get_amount(self):
+        return sum([item.get_total_price() for item in self.items.all()])
 
-    def format_amount(self):
-        return format(self.amount(), ',')
+    def get_format_amount(self):
+        return format(self.get_amount(), ',')
 
 class Item(models.Model):
     order    = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
@@ -64,8 +51,8 @@ class Item(models.Model):
     def format_price(self):
         return format(self.price, ',')
 
-    def total_price(self):
+    def get_total_price(self):
         return self.price * self.quantity
 
     def format_total_price(self):
-        return format(self.total_price(), ',')
+        return format(self.get_total_price(), ',')
