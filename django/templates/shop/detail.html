@@ -16,7 +16,9 @@
                 <p class="text-3xl">{{ product.name }}</p>
                 <div class="flex gap-2 text-2xl my-2">
                     <p class="text-blue">{{ product.format_discounted }}원</p>
+                    {% if product.price != product.discounted %}
                     <p class="text-gray_3"><del>{{ product.format_price }}원</del></p>
+                    {% endif %}
                 </div>
                 <div class="flex gap-2 mt-6">
                     <img title="Freepik - Flaticon" class="w-8" src="{% static 'image/shipped.png' %}">
