@@ -11,9 +11,9 @@
                 <div class="flex flex-col gap-2 mt-5">
                     {% for item in order_items %}
                     <div class="h-32 flex gap-4">
-                        <img class='h-full aspect-square object-cover' src='{{ item.product.images.all.first.image.url }}'>
+                        <img class='h-full aspect-square object-cover' src='{{ item.product.get_images.first.image.url }}'>
                         <div class='flex flex-col justify-center gap-2'>
-                            <p class='text-md sm:text-xl'>{{ item.full_content }}</p>
+                            <p class='text-md sm:text-xl'>{{ item }}</p>
                             <p class=''>{{ item.quantity }}개 / {{ item.format_sum_price }}원</p>
                         </div>
                     </div>
