@@ -5,20 +5,20 @@ from modules import alimtalk
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['created_at', 'orderer_name', 'orderer_number', 'status']
-    actions      = ['start_delivery'] 
+    actions      = ['done_send']
 
-    @admin.action(description="start delivery")
-    def start_delivery(self, request, queryset):
+    @admin.action(description="Done send")
+    def done_send(self, request, queryset):
         for order in queryset:
-            if order.delivery and (order.status == 'DP'):
+            if order.delivery and (order.status == 'DS'):
                 message = alimtalk.Message()
                 message.create_send_data(
                     {
                         "to": order.orderer_number.replace("-", ""),
-                        "template": "주문접수",
+                        "template": "발송완료",
 
                         "var": {
-                            "#{amount}": format(order.amount(), ",") + "원",
+                            "#{delivery}": order.delivery,
                             "#{order_id}": order.order_id
                         }
                     }

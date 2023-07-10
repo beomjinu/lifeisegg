@@ -2,7 +2,7 @@
 {% block content %}
 <div class='w-full md:w-11/12 max-w-[720px] h-full mx-auto mb-20'>
     <div class='flex flex-col gap-10 my-8'>
-        <p class='text-4xl font-bold text-blue'>{{ order.display_status }}</p>
+        <p class='text-4xl font-bold text-blue'>{{ order.get_display_status }}</p>
         <div>
             <p class="text-xl font-bold">주문 상품</p>
             <div class="flex flex-col gap-2 mt-3">
