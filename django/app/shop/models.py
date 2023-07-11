@@ -6,7 +6,7 @@ class Product(models.Model):
     og_img      = models.ImageField(upload_to='', null=True, blank=True)
     price       = models.PositiveIntegerField()
     discounted  = models.PositiveIntegerField()
-    description = models.TextField(default='')
+    description = models.TextField(null=True, blank=True)
     priority    = models.IntegerField()
 
     def __str__(self):
