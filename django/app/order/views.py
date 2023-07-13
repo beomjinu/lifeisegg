@@ -51,7 +51,7 @@ def form(request):
         for i in options:
             option = get_object_or_404(Option, pk=int(i))
             option.quantity = options[i]["quantity"]
-            option.format_sum_price = format(option.get_total_price() * option.quantity, ',')
+            option.result_price = option.get_total_price() * option.quantity
 
             order_items.append(option)
 

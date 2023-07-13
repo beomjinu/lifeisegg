@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 {% block content %}
 <script src="https://js.tosspayments.com/v1/payment"></script>
 <div class='w-full md:w-11/12 max-w-[720px] h-full mx-auto mb-20'>
@@ -14,7 +15,7 @@
                         <img class='h-full aspect-square object-cover' src='{{ item.product.get_images.first.image.url }}'>
                         <div class='flex flex-col justify-center gap-2'>
                             <p class='text-md sm:text-xl'>{{ item }}</p>
-                            <p class=''>{{ item.quantity }}개 / {{ item.format_sum_price }}원</p>
+                            <p class=''>{{ item.quantity }}개 / {{ item.result_price|intcomma }}원</p>
                         </div>
                     </div>
                     {% endfor %}

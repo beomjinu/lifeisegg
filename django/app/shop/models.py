@@ -12,12 +12,6 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
-    def format_price(self):
-        return format(self.price, ',')
-
-    def format_discounted(self):
-        return format(self.discounted, ',')
-    
     def is_sold_out(self):
         return all([option.is_sold_out for option in self.options.all()])
     
@@ -42,12 +36,6 @@ class Option(models.Model):
     
     def get_total_price(self):
         return self.product.discounted + self.price
-    
-    def format_price(self):
-        return format(self.price, ',')
-    
-    def format_total_price(self):
-        return format(self.get_total_price(), ',')
 
 class Image(models.Model):
     product     = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')

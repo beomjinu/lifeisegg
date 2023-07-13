@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 {% block content %}
 <div class="w-full md:w-11/12 max-w-[858px] h-full mx-auto">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -15,9 +16,9 @@
             <div class="w-full md:w-11/12 mx-auto sm:p-2">
                 <p class="text-3xl">{{ product.name }}</p>
                 <div class="flex gap-2 text-2xl my-2">
-                    <p class="text-blue">{{ product.format_discounted }}원</p>
+                    <p class="text-blue">{{ product.discounted|intcomma }}원</p>
                     {% if product.price != product.discounted %}
-                    <p class="text-gray_3"><del>{{ product.format_price }}원</del></p>
+                    <p class="text-gray_3"><del>{{ product.price|intcomma }}원</del></p>
                     {% endif %}
                 </div>
                 <div class="flex gap-2 mt-6">
@@ -33,9 +34,9 @@
                         <option value="NONE" selected>옵션을 선택하세요.</option>
                         {% for option in product.get_options %}
                         {% if option.is_sold_out %}
-                        <option value="{{ option.id }}" disabled>+{{ option.format_price }}원 | {{ option.content }} (품절)</option>
+                        <option value="{{ option.id }}" disabled>+{{ option.price|intcomma }}원 | {{ option.content }} (품절)</option>
                         {% else %}
-                        <option value="{{ option.id }}">+{{ option.format_price }}원 | {{ option.content }}</option>
+                        <option value="{{ option.id }}">+{{ option.price|intcomma }}원 | {{ option.content }}</option>
                         {% endif %}
                         {% endfor %}
                     </select>

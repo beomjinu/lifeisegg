@@ -12,6 +12,3 @@ class Payment(models.Model):
     
     def get_approved_at(self):
         return datetime.strptime(self.get_data()['approvedAt'], '%Y-%m-%dT%H:%M:%S%z')
-    
-    def format_approved_at(self):
-        return self.get_approved_at().strftime('%Y년 %m월 %d일 %H시 %M분')  

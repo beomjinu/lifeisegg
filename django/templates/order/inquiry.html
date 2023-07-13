@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load humanize %}
 {% block content %}
 <div class='w-full md:w-11/12 max-w-[720px] h-full mx-auto mb-20'>
     <div class='flex flex-col gap-10 my-8'>
@@ -11,7 +12,7 @@
                     <div class=' rounded-lg bg-gray_1'>
                         <div class='flex flex-col justify-center gap-2'>
                             <p class='text-xl'>{{ item.content }}</p>
-                            <p class=''>{{ item.quantity }}개 / {{ item.format_total_price }}원</p>
+                            <p class=''>{{ item.quantity }}개 / {{ item.get_total_price|intcomma }}원</p>
                         </div>
                     </div>
                 </div>
@@ -22,7 +23,7 @@
             <p class='text-xl font-bold'>주문 정보</p>
             <div class=''>
                 <label class="text-sm font-medium">주문 일시</label>
-                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.get_kr_created_at }}' disabled>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.created_at|date:'Y년 m월 d일 H시 i분' }}' disabled>
             </div>
             <div>
                 <label class="text-sm font-medium">주문자</label>
@@ -54,11 +55,11 @@
             {% if order.status != 'WFP' %}
             <div class='my-2'>
                 <label class="text-sm font-medium">결제 금액</label>
-                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.get_format_amount }}원' disabled>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.get_amount|intcomma }}원' disabled>
             </div>
             <div class='my-2'>
                 <label class="text-sm font-medium">결제 일시</label>
-                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.format_approved_at }}' disabled>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.get_approved_at|date:'Y년 m월 d일 H시 i분' }}' disabled>
             </div>
             {% else %}
             <div class='my-2'>

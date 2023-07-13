@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load humanize %}
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
     {% for product in products %}
     <a class='relative' href="{% url 'shop:detail' product.id %}">
@@ -13,9 +14,9 @@
             <div>
                 <p>{{ product.name }}</p>
                 <div class="flex gap-1 text-sm">
-                    <p class="text-blue">{{ product.format_discounted }}원</p>
+                    <p class="text-blue">{{ product.discounted|intcomma }}원</p>
                     {% if product.price != product.discounted %}
-                    <p class="text-gray_3"><del>{{ product.format_price }}원</del></p>
+                    <p class="text-gray_3"><del>{{ product.price|intcomma }}원</del></p>
                     {% endif %}
                 </div>
             </div>

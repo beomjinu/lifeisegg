@@ -20,9 +20,6 @@ class Order(models.Model):
     )
 
     status           = models.CharField(max_length=99, choices=status_choices)
-
-    def get_kr_created_at(self):
-        return self.created_at.strftime("%Y년 %m월 %d일 %H시 %M분")
     
     def get_simple_items(self):
         return self.items.all()[0].content + (('외 ' + str(len(self.items.all()) - 1) + '개') if (len(self.items.all()) - 1) != 0 else '')
@@ -38,20 +35,11 @@ class Order(models.Model):
     def get_amount(self):
         return sum([item.get_total_price() for item in self.items.all()])
 
-    def get_format_amount(self):
-        return format(self.get_amount(), ',')
-
 class Item(models.Model):
     order    = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     content  = models.CharField(max_length=99)
     price    = models.PositiveIntegerField()
     quantity = models.PositiveIntegerField()
 
-    def format_price(self):
-        return format(self.price, ',')
-
     def get_total_price(self):
         return self.price * self.quantity
-
-    def format_total_price(self):
-        return format(self.get_total_price(), ',')
