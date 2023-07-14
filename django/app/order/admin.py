@@ -10,7 +10,7 @@ class OrderAdmin(admin.ModelAdmin):
     @admin.action(description="Done send")
     def done_send(self, request, queryset):
         for order in queryset:
-            if order.delivery and (order.status == 'DS'):
+            if order.delivery and order.status == 'DP':
                 message = alimtalk.Message()
                 message.create_send_data(
                     {
@@ -24,5 +24,7 @@ class OrderAdmin(admin.ModelAdmin):
                     }
                 )
                 message.send()
+                order.status = 'DS'
+                order.save()
             else:
                 pass
