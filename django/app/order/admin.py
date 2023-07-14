@@ -1,10 +1,18 @@
 from django.contrib import admin
-from .models import Order
+from .models import Order, Item
+from app.payment.models import Payment
 from modules import alimtalk
+
+class ItemInline(admin.TabularInline):
+    model = Item
+
+class PaymentInline(admin.TabularInline):
+    model = Payment
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['created_at', 'orderer_name', 'orderer_number', 'status']
+    inlines      = [ItemInline, PaymentInline]
     actions      = ['done_send']
 
     @admin.action(description="Done send")
