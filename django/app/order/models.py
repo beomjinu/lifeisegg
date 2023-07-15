@@ -4,7 +4,6 @@ class Order(models.Model):
     order_id         = models.CharField(max_length=99, null=True, blank=True)
     orderer_name     = models.CharField(max_length=99)
     orderer_number   = models.CharField(max_length=99)
-    orderer_email    = models.EmailField(max_length=99)
     recipient_name   = models.CharField(max_length=99)
     recipient_number = models.CharField(max_length=99)
     address          = models.CharField(max_length=99)

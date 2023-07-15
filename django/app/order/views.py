@@ -23,7 +23,6 @@ def form(request):
         order = Order()
         order.orderer_name     = post_data.get('orderer_name')
         order.orderer_number   = post_data.get('orderer_number')
-        order.orderer_email    = post_data.get('orderer_email')
         order.recipient_name   = post_data.get('recipient_name')
         order.recipient_number = post_data.get('recipient_number')
         order.address          = post_data.get('address') + ' ' + post_data.get('address_detail')
