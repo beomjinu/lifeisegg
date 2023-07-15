@@ -29,7 +29,7 @@ class Order(models.Model):
             'WFP': '결제를 기다리고 있습니다.',
             'DP': '결제가 완료되었습니다.',
             'DS': '상품을 발송 완료하였습니다.',
-            'C': '취소된 주문입니다.'
+            'C': '주문이 취소되었습니다.'
         }[self.status]
     
     def get_amount(self):

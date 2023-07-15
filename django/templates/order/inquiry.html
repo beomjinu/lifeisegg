@@ -55,7 +55,11 @@
             {% if order.status != 'WFP' %}
             <div class='my-2'>
                 <label class="text-sm font-medium">결제 금액</label>
+                {% if order.status == 'C' %}
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.get_amount|intcomma }}원 (환불 완료)' disabled>
+                {% else %}
                 <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.get_amount|intcomma }}원' disabled>
+                {% endif %}
             </div>
             <div class='my-2'>
                 <label class="text-sm font-medium">결제 일시</label>
@@ -69,7 +73,7 @@
         </div>
         <div>
             <p class='text-xl font-bold'>배송 정보</p>
-            {% if order.delivery and order.status == 'DS' or order.status == 'C' %}
+            {% if order.delivery and order.status == 'DS' %}
             <div class='my-2'>
                 <label class="text-sm font-medium">운송장 번호</label>
                 <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.delivery }}' disabled>

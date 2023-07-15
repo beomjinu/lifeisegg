@@ -8,7 +8,7 @@ class ImageInline(admin.TabularInline):
     model = Image
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'discounted', 'price'] 
+    list_display = ['name', 'discounted', 'price']
     list_filter = ['priority']
     search_fields = ['name']
     inlines = [OptionInline, ImageInline]
