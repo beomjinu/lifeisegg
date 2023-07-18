@@ -66,7 +66,7 @@ def success(request):
 
         return redirect('order:inquiry', order_id=order_id)
     else:
-        return HttpResponse('오류가 발생하였습니다. \n' + res.read())
+        return HttpResponse('오류가 발생하였습니다. ' + res.read().decode('utf-8'))
 
 
 def fail(request):
