@@ -41,29 +41,33 @@ def success(request):
     conn.request('POST', '/v1/payments/confirm', payload, headers)
     res = conn.getresponse()
 
-    payment = Payment()
-    payment.order = order
-    payment.data  = base64.b64encode(res.read()).decode('utf-8')
-    payment.save()
+    if 200 <= res.status < 300:
+        payment = Payment()
+        payment.order = order
+        payment.data  = base64.b64encode(res.read()).decode('utf-8')
+        payment.save()
 
-    order.status = 'DP'
-    order.save()
+        order.status = 'DP'
+        order.save()
 
-    message = alimtalk.Message()
-    message.create_send_data(
-        {
-            "to": order.orderer_number.replace("-", ""),
-            "template": "주문접수",
+        message = alimtalk.Message()
+        message.create_send_data(
+            {
+                "to": order.orderer_number.replace("-", ""),
+                "template": "주문접수",
 
-            "var": {
-                "#{amount}": format(order.get_amount(), ",") + "원",
-                "#{order_id}": order.order_id
+                "var": {
+                    "#{amount}": format(order.get_amount(), ",") + "원",
+                    "#{order_id}": order.order_id
+                }
             }
-        }
-    )
-    message.send()
+        )
+        message.send()
 
-    return redirect('order:inquiry', order_id=order_id)
+        return redirect('order:inquiry', order_id=order_id)
+    else:
+        return HttpResponse('오류가 발생하였습니다. \n' + res.read())
+
 
 def fail(request):
     return HttpResponse(request.GET.get('code') + ':' + request.GET.get('message') + ':' + request.GET.get('orderId'))
