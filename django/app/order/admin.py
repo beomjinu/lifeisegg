@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import Order, Item
 from app.payment.models import Payment
-from modules import alimtalk
+from utils.alimtalk import Message
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 import http, json, base64
@@ -22,7 +22,7 @@ class OrderAdmin(admin.ModelAdmin):
     def done_send(self, request, queryset):
         for order in queryset:
             if order.delivery and order.status == 'DP':
-                message = alimtalk.Message()
+                message = Message()
                 message.create_send_data(
                     {
                         "to": order.orderer_number.replace("-", ""),

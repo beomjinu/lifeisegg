@@ -3,7 +3,7 @@ from app.order.models import Order
 from .models import Payment
 import http.client, base64, json
 from django.conf import settings
-from modules import alimtalk
+from utils.alimtalk import Message
 
 def open(request, order_id):
     order = get_object_or_404(Order, order_id=order_id)
@@ -50,7 +50,7 @@ def success(request):
         order.status = 'DP'
         order.save()
 
-        message = alimtalk.Message()
+        message = Message()
         message.create_send_data(
             {
                 "to": order.orderer_number.replace("-", ""),
