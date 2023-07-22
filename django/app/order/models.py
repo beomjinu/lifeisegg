@@ -1,4 +1,8 @@
+from utils.tosspayments import TossPayments
 from django.db import models
+
+from datetime import datetime
+
 
 class Order(models.Model):
     order_id         = models.CharField(max_length=99, null=True, blank=True)
@@ -33,6 +37,17 @@ class Order(models.Model):
     
     def get_amount(self):
         return sum([item.get_total_price() for item in self.items.all()])
+    
+    @property
+    def payment(self) -> dict:
+        toss = TossPayments()
+        response = toss.inquiry(order_id=self.order_id)
+        
+        data = response.json()
+        data['approvedAt'] = datetime.strptime(data['approvedAt'], '%Y-%m-%dT%H:%M:%S%z')
+
+        return data 
+    
 
 class Item(models.Model):
     order    = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')

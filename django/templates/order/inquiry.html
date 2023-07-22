@@ -55,14 +55,14 @@
             <div class='my-2'>
                 <label class="text-sm font-medium">결제 금액</label>
                 {% if order.status == 'C' %}
-                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.get_amount|intcomma }}원 (환불 완료)' disabled>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.totalAmount|intcomma }}원 (환불 완료)' disabled>
                 {% else %}
-                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.get_amount|intcomma }}원' disabled>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.totalAmount|intcomma }}원' disabled>
                 {% endif %}
             </div>
             <div class='my-2'>
                 <label class="text-sm font-medium">결제 일시</label>
-                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.get_approved_at|date:'Y년 m월 d일 H시 i분' }}' disabled>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.approvedAt|date:'Y년 m월 d일 H시 i분' }}' disabled>
             </div>
             {% else %}
             <div class='my-2'>
