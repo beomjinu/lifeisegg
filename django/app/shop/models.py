@@ -12,13 +12,16 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
-    def is_sold_out(self):
+    @property
+    def is_sold_out(self) -> bool:
         return all([option.is_sold_out for option in self.options.all()])
     
-    def get_images(self):
+    @property
+    def solted_images(self):
         return self.images.all().order_by('priority')
     
-    def get_options(self):
+    @property
+    def solted_options(self):
         return self.options.all().order_by('priority')
     
     def get_absolute_url(self):        
@@ -34,7 +37,8 @@ class Option(models.Model):
     def __str__(self):
         return f'{self.product.name} | {self.content}'
     
-    def get_total_price(self):
+    @property
+    def total_price(self) -> int:
         return self.product.discounted + self.price
 
 class Image(models.Model):

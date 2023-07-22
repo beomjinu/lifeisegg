@@ -21,7 +21,7 @@ def detail(request, product_id):
     context = {
         'title': 'LIFEISEGG - ' + product.name,
         'product': product,
-        'og_img_url': product.get_images().first().image.url if not product.og_img else product.og_img.url
+        'og_img_url': product.solted_images.first().image.url if not product.og_img else product.og_img.url
     }
 
     return render(request, 'shop/detail.html', context=context)

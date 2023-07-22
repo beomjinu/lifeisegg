@@ -23,20 +23,23 @@ class Order(models.Model):
     )
 
     status           = models.CharField(max_length=99, choices=status_choices)
+
+    @property
+    def amount(self) -> int:
+        return sum([item.total_price for item in self.items.all()])
     
-    def get_simple_items(self):
+    @property
+    def content(self) -> str:
         return self.items.all()[0].content + (('외 ' + str(len(self.items.all()) - 1) + '개') if (len(self.items.all()) - 1) != 0 else '')
 
-    def get_display_status(self):
+    @property
+    def status_display(self) -> str:
         return {
             'WFP': '결제를 기다리고 있습니다.',
             'DP': '결제가 완료되었습니다.',
             'DS': '상품을 발송 완료하였습니다.',
             'C': '주문이 취소되었습니다.'
         }[self.status]
-    
-    def get_amount(self):
-        return sum([item.get_total_price() for item in self.items.all()])
     
     @property
     def payment(self) -> dict:
@@ -46,8 +49,7 @@ class Order(models.Model):
         data = response.json()
         data['approvedAt'] = datetime.strptime(data['approvedAt'], '%Y-%m-%dT%H:%M:%S%z')
 
-        return data 
-    
+        return data
 
 class Item(models.Model):
     order    = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
@@ -55,5 +57,6 @@ class Item(models.Model):
     price    = models.PositiveIntegerField()
     quantity = models.PositiveIntegerField()
 
-    def get_total_price(self):
+    @property
+    def total_price(self):
         return self.price * self.quantity

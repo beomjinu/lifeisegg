@@ -23,7 +23,7 @@ def open(request, order_id):
 def success(request):
     order = get_object_or_404(Order, order_id=request.GET.get('orderId'))
 
-    if order.get_amount() != int(request.GET.get('amount')):
+    if order.amount != int(request.GET.get('amount')):
         return HttpResponse('요청한 결제 금액과 실제 결제 금액이 다릅니다.')
     
     payload = {
@@ -45,7 +45,7 @@ def success(request):
                 "template": "주문접수",
 
                 "var": {
-                    "#{amount}": format(order.get_amount(), ",") + "원",
+                    "#{amount}": format(order.amount, ",") + "원",
                     "#{order_id}": order.order_id
                 }
             }

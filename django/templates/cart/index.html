@@ -14,10 +14,10 @@
             <div id='id-{{ item.id }}' class='flex justify-between'>
                 <div class='w-full'>
                     <div class="relative rounded-lg bg-gray_1 h-24 md:h-40">
-                        <button onclick="set_item('{{ item.id }}', -{{ item.quantity }})" class="text-gray_3 absolute right-2 h-[6.5px] w-[6.5px] leading-[6.5px] flex flex-col m-2">⨯</button>
+                        <button onclick="delete_item('{{ item.id }}')" class="text-gray_3 absolute right-2 h-[6.5px] w-[6.5px] leading-[6.5px] flex flex-col m-2">⨯</button>
                         <div class="flex justify-between w-full h-full">
                             <div class='flex gap-8'>
-                                <img src='{{ item.product.get_images.first.image.url }}' class='aspect-square object-cover h-full rounded-l-lg'>
+                                <img src='{{ item.product.solted_images.first.image.url }}' class='aspect-square object-cover h-full rounded-l-lg'>
                                 <div class="flex flex-col justify-center gap-2 h-full">
                                     <p class='text-sm md:text-md lg:text-xl'>{{ item.product }}</p>
                                     <div class='flex gap-1 text-sm lg:text-base'>
@@ -68,7 +68,7 @@
     {% for item in items %}
     items['{{ item.id }}'] = {
         'quantity': {{ item.quantity }},
-        'price': {{ item.get_total_price }}
+        'price': {{ item.total_price }}
     }
     {% endfor %}
 
@@ -109,6 +109,10 @@
             set_cookie('cart', data_encode(cart_data))
             set_items_element()
         }
+    }
+
+    function delete_item(id) {
+        set_item(id, -1 * items[id]['quantity'])
     }
 
     function buy() {

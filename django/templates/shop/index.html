@@ -10,7 +10,7 @@
         </div>
         {% endif %}
         <div class="flex flex-col gap-1">
-            <img class="aspect-square object-cover" src="{{ product.get_images.first.image.url }}">
+            <img class="aspect-square object-cover" src="{{ product.solted_images.first.image.url }}">
             <div>
                 <p>{{ product.name }}</p>
                 <div class="flex gap-1 text-sm">
