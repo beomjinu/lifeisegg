@@ -20,7 +20,7 @@ def open(request, order_id):
     context = {
         'title': 'LIFEISEGG - 결제하기',
         'order': order,
-        'toss_ck': settings.TOSS_CK,
+        'toss_ck': settings.ENV_DATA['TOSS_CK'],
     }
 
     return render(request, 'payment/payment.html', context)

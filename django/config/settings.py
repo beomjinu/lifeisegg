@@ -3,6 +3,7 @@ from pathlib import Path
 import os
 
 load_dotenv()
+ENV_DATA = dict(os.environ)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -11,21 +12,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('django_sk')
+SECRET_KEY = ENV_DATA['DJANGO_SK']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if os.environ.get('debug') == 'True' else False
+DEBUG = True if ENV_DATA['DEBUG'] == 'True' else False
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS=['https://*.lifeisegg.shop']
 
-TOSS_CK = os.environ.get('toss_ck')
-TOSS_SK = os.environ.get('toss_sk')
-
-SOLAPI_CK = os.environ.get('SOLAPI_CK')
-SOLAPI_SK = os.environ.get('SOLAPI_SK')
-SOLAPI_PFID = os.environ.get('SOLAPI_PFID')
-ALIMTALK_FROM_NUMBER = os.environ.get('ALIMTALK_FROM_NUMBER')
 # Application definition
 
 INSTALLED_APPS = [
@@ -79,7 +73,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-if os.environ.get('debug') == 'True':
+if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -90,9 +84,9 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('POSTGRES_DB'),
-            'USER': os.environ.get('POSTGRES_USER'),
-            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+            'NAME': ENV_DATA['POSTGRES_DB'],
+            'USER': ENV_DATA['POSTGRES_USER'],
+            'PASSWORD': ENV_DATA['POSTGRES_PASSWORD'],
             'HOST': 'db',
             'PORT': '5432',
         }

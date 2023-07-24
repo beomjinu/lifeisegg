@@ -14,7 +14,7 @@ class Message:
         self.salt      = str(uuid.uuid1().hex)
 
         self.headers = {
-            'Authorization': 'HMAC-SHA256 ApiKey=' + settings.SOLAPI_CK + ', Date=' + self.date + ', salt=' + self.salt + ', signature=' + (hmac.new((settings.SOLAPI_SK).encode(), (self.date + self.salt).encode(), hashlib.sha256).hexdigest()),
+            'Authorization': 'HMAC-SHA256 ApiKey=' + settings.ENV_DATA['SOLAPI_CK'] + ', Date=' + self.date + ', salt=' + self.salt + ', signature=' + (hmac.new((settings.ENV_DATA['SOLAPI_SK']).encode(), (self.date + self.salt).encode(), hashlib.sha256).hexdigest()),
             'Content-Type': 'application/json; charset=utf-8'
         }
 
@@ -29,10 +29,10 @@ class Message:
 
             'message': {
                 'to': data["to"],
-                'from': settings.ALIMTALK_FROM_NUMBER,
+                'from': settings.ENV_DATA['SOLAPI_NUMBER'],
                 
                 'kakaoOptions': {
-                    'pfId': settings.SOLAPI_PFID,
+                    'pfId': settings.ENV_DATA['SOLAPI_PFID'],
                     'templateId': self.templates[data["template"]],
                     'variables': data["var"]
                 }

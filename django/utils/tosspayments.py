@@ -3,7 +3,7 @@ import requests, base64
 
 class TossPayments:
     def __init__(self):
-        self.secret_key = settings.TOSS_SK
+        self.secret_key = settings.ENV_DATA['TOSS_SK']
         self.base_url = 'https://api.tosspayments.com'
 
         self.headers = {
