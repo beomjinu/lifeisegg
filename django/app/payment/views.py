@@ -50,7 +50,7 @@ def success(request):
     message = Message()
     message.create_send_data(
             {
-                "to": order.orderer_number.replace("-", ""),
+                "to": order.orderer_number,
                 "template": "주문접수",
 
                 "var": {

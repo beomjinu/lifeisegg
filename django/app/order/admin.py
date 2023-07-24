@@ -22,7 +22,7 @@ class OrderAdmin(admin.ModelAdmin):
                 message = Message()
                 message.create_send_data(
                     {
-                        "to": order.orderer_number.replace("-", ""),
+                        "to": order.orderer_number,
                         "template": "발송완료",
 
                         "var": {
