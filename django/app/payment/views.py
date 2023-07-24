@@ -43,7 +43,7 @@ def success(request):
     response = toss.success(payload=payload)
     
     if not 200 <= response.status_code < 300:
-        logger.critical(f'ip: {get_client_ip(request=request)} 토스페이먼츠 오류 data: {response.json()}')
+        logger.critical(f'order_id: {order.order_id} 토스페이먼츠 결제 승인 오류 data: {response.json()}')
 
         return HttpResponse(f'오류가 발생하였습니다. data: {response.json()}')
     
@@ -59,7 +59,10 @@ def success(request):
                 }
             }
         )
-    message.send()
+    response = message.send()
+
+    if not 200 <= response.status_code < 300:
+        logger.critical(f'order_id: {order.order_id} 알림톡 발송 오류 data: {response.json()}')
 
     order.status = 'DP'
     order.save()

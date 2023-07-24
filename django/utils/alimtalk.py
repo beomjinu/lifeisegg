@@ -1,5 +1,6 @@
 import platform, os, requests, time, datetime, uuid, hmac, hashlib, json
 from django.conf import settings
+from django.utils import timezone
 
 class Message:
     def __init__(self):
@@ -9,7 +10,7 @@ class Message:
         }
 
         self.url       = "https://api.solapi.com/messages/v4/send"
-        self.date      = self.get_iso_datetime()
+        self.date      = timezone.now().isoformat()
         self.salt      = str(uuid.uuid1().hex)
 
         self.headers = {
@@ -21,12 +22,6 @@ class Message:
             '주문접수': 'KA01TP230701162116367VjEPEehkl6I',
             '발송완료': 'KA01TP230708122917670lqAsmIPnu7C'
         }        
-    
-    def get_iso_datetime(self):
-        utc_offset_sec = time.altzone if time.localtime().tm_isdst else time.timezone
-        utc_offset = datetime.timedelta(seconds=-utc_offset_sec)
-
-        return datetime.datetime.now().replace(tzinfo=datetime.timezone(offset=utc_offset)).isoformat()    
 
     def create_send_data(self, data):
         self.send_data = {
