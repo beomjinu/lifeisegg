@@ -9,6 +9,8 @@ from utils.tools import get_client_ip
 
 import logging
 
+logger = logging.getLogger(__name__)
+
 def open(request, order_id):
     order = get_object_or_404(Order, order_id=order_id)
     
@@ -27,8 +29,7 @@ def success(request):
     order = get_object_or_404(Order, order_id=request.GET.get('orderId'))
 
     if order.amount != int(request.GET.get('amount')):
-        logger = logging.getLogger(__name__)
-        logger.error(f'ip: {get_client_ip(request)} ')
+        logger.error(f'ip: {get_client_ip(request)} order_id:{order.order_id} 사용자가 변조를 시도하였습니다.')
 
         return HttpResponse('요청한 결제 금액과 실제 결제 금액이 다릅니다.')
     
@@ -42,10 +43,9 @@ def success(request):
     response = toss.success(payload=payload)
     
     if not 200 <= response.status_code < 300:
-        logger = logging.getLogger(__name__)
-        logger.critical(f'order id:{order.order_id} tosspayments error data: {response.json()}')
+        logger.critical(f'ip: {get_client_ip(request=request)} 토스페이먼츠 오류 data: {response.json()}')
 
-        return HttpResponse('오류가 발생하였습니다. ' + response.json())
+        return HttpResponse(f'오류가 발생하였습니다. data: {response.json()}')
     
     message = Message()
     message.create_send_data(
