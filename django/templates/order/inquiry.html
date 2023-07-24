@@ -3,7 +3,7 @@
 {% block content %}
 <div class='w-full md:w-11/12 max-w-[720px] h-full mx-auto mb-20'>
     <div class='flex flex-col gap-10 my-8'>
-        <p class='text-4xl font-bold text-blue'>{{ order.display_status }}</p>
+        <p class='text-4xl font-bold text-blue'>{{ order.status_display }}</p>
         <div>
             <p class="text-xl font-bold">주문 상품</p>
             <div class="flex flex-col gap-2 mt-3">
@@ -29,14 +29,14 @@
                 <label class="text-sm font-medium">주문자</label>
                 <div class='gap-4 grid grid-cols-2'>
                     <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.orderer_name }}' disabled>
-                    <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.orderer_number }}' disabled>
+                    <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3 tracking-wider" value='{{ order.orderer_number }}' disabled>
                 </div>
             </div>
             <div>
                 <label class="text-sm font-medium">배송지</label>
                 <div class='gap-4 grid grid-cols-2'>
                     <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.recipient_name }}' disabled>
-                    <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.recipient_number }}' disabled>
+                    <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3 tracking-wider" value='{{ order.recipient_number }}' disabled>
                 </div>
                 <input type="text" class="mt-2 h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.address }}' disabled>
             </div>
