@@ -206,5 +206,9 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
+        'lifeisegg': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+        },
     }
 }

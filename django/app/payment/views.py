@@ -5,6 +5,9 @@ from app.order.models import Order
 
 from utils.alimtalk import Message
 from utils.tosspayments import TossPayments
+from utils.tools import get_client_ip
+
+import logging
 
 def open(request, order_id):
     order = get_object_or_404(Order, order_id=order_id)
@@ -24,6 +27,9 @@ def success(request):
     order = get_object_or_404(Order, order_id=request.GET.get('orderId'))
 
     if order.amount != int(request.GET.get('amount')):
+        logger = logging.getLogger(__name__)
+        logger.error(f'ip: {get_client_ip(request)} ')
+
         return HttpResponse('요청한 결제 금액과 실제 결제 금액이 다릅니다.')
     
     payload = {
@@ -36,7 +42,10 @@ def success(request):
     response = toss.success(payload=payload)
     
     if not 200 <= response.status_code < 300:
-        return HttpResponse('오류가 발생하였습니다. ' + toss.get_response_body())
+        logger = logging.getLogger(__name__)
+        logger.critical(f'order id:{order.order_id} tosspayments error data: {response.json()}')
+
+        return HttpResponse('오류가 발생하였습니다. ' + response.json())
     
     message = Message()
     message.create_send_data(
