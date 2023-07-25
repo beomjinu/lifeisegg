@@ -1,9 +1,5 @@
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from .models import Product
-import json
-
-def redirect_index(request):
-    return redirect("shop:index")
 
 def index(request):
     products = Product.objects.order_by('priority')

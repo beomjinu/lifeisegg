@@ -5,8 +5,6 @@ from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 from django.shortcuts import render
 
-from app.shop.views import redirect_index
-
 from app.shop.sitemaps import ProductSitemap
 from app.terms.sitemaps import TermsSitemap
 
@@ -20,8 +18,7 @@ urlpatterns = [
     path('adminpage/', admin.site.urls),
     
     # apps
-    path('shop/', include("app.shop.urls")),
-    path('', redirect_index), # redirect shop/
+    path('', include("app.shop.urls")),
     path('terms/', include("app.terms.urls")),
     path('order/', include("app.order.urls")),
     path('payment/', include('app.payment.urls')),
