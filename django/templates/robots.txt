@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: /adminpage/
 Disallow: /order/
-Sitemap: /sitemap.xml
+Sitemap: https://lifeisegg.shop/sitemap.xml
