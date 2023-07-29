@@ -28,6 +28,9 @@ urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': {'Product': ProductSitemap, 'Trems': TermsSitemap}}, name='sitemap'),
 
     # 404
-    path('404.html', lambda request: render(request, '404.html', {}))
+    path('404.html', lambda request: render(request, '404.html')),
+
+    # robots.txt
+    path('robots.txt', lambda request: render(request, 'robots.txt', content_type='text/plain')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
