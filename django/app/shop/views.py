@@ -5,7 +5,7 @@ def index(request):
     products = Product.objects.order_by('priority')
 
     context = {
-        'title': 'LIFEISEGG - SHOP',
+        'title': '라이프이즈에그 보드샵',
         'products': products
     }
 
@@ -15,7 +15,8 @@ def detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
 
     context = {
-        'title': 'LIFEISEGG - ' + product.name,
+        'title': f'{product.name} - 라이프이즈에그',
+        'description': f'{product.name} {format(product.discounted, ",")}원에 구매하기', 
         'product': product,
         'og_img_url': product.solted_images.first().image.url if not product.og_img else product.og_img.url
     }

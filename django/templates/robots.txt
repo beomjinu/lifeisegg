@@ -1,4 +1,6 @@
 User-agent: *
 Disallow: /adminpage/
 Disallow: /order/
+Disallow: /payment/
+Disallow: /cart/
 Sitemap: https://lifeisegg.shop/sitemap.xml

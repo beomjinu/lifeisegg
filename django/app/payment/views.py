@@ -18,7 +18,7 @@ def open(request, order_id):
         return HttpResponse('order.status is not WFP: 이미 결제 완료된 주문입니다.')
 
     context = {
-        'title': 'LIFEISEGG - 결제하기',
+        'title': '결제하기 - 라이프이즈에그',
         'order': order,
         'toss_ck': settings.ENV_DATA['TOSS_CK'],
     }

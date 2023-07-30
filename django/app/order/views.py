@@ -7,7 +7,7 @@ def inquiry(request, order_id):
     order = get_object_or_404(Order, order_id=order_id)
 
     context = {
-        'title': 'LIFEISEGG - 주문 조회',
+        'title': '주문 조회 - 라이프이즈에그',
         'order': order
     }
 
@@ -55,7 +55,7 @@ def form(request):
             order_items.append(option)
 
         context = {
-            'title': 'LIFEISEGG - 주문하기',
+            'title': '주문하기 - 라이프이즈에그',
             'order_items': order_items
         }
 

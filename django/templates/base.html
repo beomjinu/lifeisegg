@@ -4,14 +4,16 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <title>{{ title }}</title>
         <link rel="shortcut icon" href='{% static 'image/favicon.ico' %}'/>
+        
+        <title>{{ title }}</title>
+        <meta name="description" content='{{ description|default:'가장 저렴한 스케이트보드 데크' }}'>
 
         <!--og tags-->
         <meta property="og:type" content="website">
-        <meta property="og:title" content="{{ title }}"/>
-        <meta property="og:description" content="스케이트보드의 새로운 미래">
-        <meta property="og:site_name" content="LIFEISEGG">
+        <meta property="og:title" content='{{ title|default:'라이프이즈에그 보드샵' }}'/>
+        <meta property="og:description" content='{{ description|default:'가장 저렴한 스케이트보드 데크' }}'>
+        <meta property="og:site_name" content="LIFEISEGG.">
         {% if og_img_url %}
         <meta property="og:image" content="{{ og_img_url }}"/>
         {% else %}

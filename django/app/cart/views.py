@@ -6,7 +6,7 @@ def index(request):
     cart_cookie = request.COOKIES.get('cart')
 
     context = {
-        'title': 'LIFEISEGG - 장바구니',
+        'title': '장바구니 - 라이프이즈에그',
         'cart_cookie': cart_cookie,
     }
 
