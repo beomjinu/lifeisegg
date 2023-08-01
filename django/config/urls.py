@@ -24,7 +24,7 @@ urlpatterns = [
     path('payment/', include('app.payment.urls')),
     path('cart/', include('app.cart.urls')),
     
-    # sitemaps.xml
+    # sitemap.xml
     path('sitemap.xml', sitemap, {'sitemaps': {'Product': ProductSitemap, 'Trems': TermsSitemap}}, name='sitemap'),
 
     # 404.html
