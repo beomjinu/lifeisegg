@@ -23,6 +23,9 @@ urlpatterns = [
     path('order/', include("app.order.urls")),
     path('payment/', include('app.payment.urls')),
     path('cart/', include('app.cart.urls')),
+
+    # summernote
+    path(r'^summernote/', include('django_summernote.urls')),
     
     # sitemap.xml
     path('sitemap.xml', sitemap, {'sitemaps': {'Product': ProductSitemap, 'Trems': TermsSitemap}}, name='sitemap'),

@@ -60,6 +60,7 @@
         <hr class="w-full h-px bg-dark border-0">
     </div>
     <div>
+        {{ product.post|default:''|safe }}
     </div>
 </div>
 <script src='{% static 'js/cookie.js' %}'></script>

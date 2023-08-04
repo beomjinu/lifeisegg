@@ -1,8 +1,5 @@
-from django.shortcuts import get_object_or_404, HttpResponse
 from django.contrib import admin
-
 from .models import Order, Item
-
 from utils.alimtalk import Message
 from utils.tosspayments import TossPayments
 
