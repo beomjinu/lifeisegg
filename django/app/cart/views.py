@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from app.shop.models import Option
+from app.product.models import Option
 import base64, json
 
 def index(request):

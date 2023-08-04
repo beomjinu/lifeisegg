@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from app.shop.models import Option
+from app.product.models import Option
 from .models import Order, Item
 import base64, json, string, random
 

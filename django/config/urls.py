@@ -4,8 +4,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 from django.shortcuts import render, HttpResponse
-
-from app.shop.sitemaps import ProductSitemap
+from app.product.sitemaps import ProductSitemap
+from app.product.views import index
 from app.terms.sitemaps import TermsSitemap
 
 sitemaps = {
@@ -17,8 +17,11 @@ urlpatterns = [
     # admin
     path('adminpage/', admin.site.urls),
     
+    # index
+    path('', index, name='index'),
+
     # apps
-    path('', include("app.shop.urls")),
+    path('product/', include("app.product.urls")),
     path('terms/', include("app.terms.urls")),
     path('order/', include("app.order.urls")),
     path('payment/', include('app.payment.urls')),

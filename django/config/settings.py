@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'django_summernote',
 
-    'app.shop',
+    'app.product',
     'app.terms',
     'app.order',
     'app.payment',

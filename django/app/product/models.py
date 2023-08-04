@@ -25,7 +25,7 @@ class Product(models.Model):
         return self.options.all().order_by('priority')
     
     def get_absolute_url(self):        
-        return reverse('shop:detail', kwargs={'product_id': self.id})
+        return reverse('product:detail', kwargs={'product_id': self.id})
 
 class Option(models.Model):
     product     = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='options')

@@ -9,7 +9,7 @@ def index(request):
         'products': products
     }
 
-    return render(request, 'shop/index.html', context=context)    
+    return render(request, 'product/index.html', context=context)    
 
 def detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
@@ -21,4 +21,4 @@ def detail(request, product_id):
         'og_img_url': product.solted_images.first().image.url,
     }
 
-    return render(request, 'shop/detail.html', context=context)
+    return render(request, 'product/detail.html', context=context)

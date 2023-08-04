@@ -3,7 +3,7 @@
 {% load humanize %}
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
     {% for product in products %}
-    <a class='relative' href="{% url 'shop:detail' product.id %}">
+    <a class='relative' href="{% url 'product:detail' product.id %}">
         {% if product.is_sold_out %}
         <div class='absolute aspect-square w-16 right-0 border border-gray_3 bg-white m-2 flex flex-col justify-center'>
             <p class='text-center text-sm leading-4'>SOLD OUT</p>
