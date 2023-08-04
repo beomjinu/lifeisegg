@@ -3,7 +3,6 @@ from django.urls import reverse
 
 class Product(models.Model):
     name        = models.CharField(max_length=99)
-    og_img      = models.ImageField(upload_to='product/', null=True, blank=True)
     price       = models.PositiveIntegerField()
     discounted  = models.PositiveIntegerField()
     description = models.TextField(null=True, blank=True)

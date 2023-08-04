@@ -18,7 +18,7 @@ def detail(request, product_id):
         'title': f'{product.name} 구매하기 - 라이프이즈에그',
         'description': f'{product.name} {format(product.discounted, ",")}원에 구매하기', 
         'product': product,
-        'og_img_url': product.solted_images.first().image.url if not product.og_img else product.og_img.url
+        'og_img_url': product.solted_images.first().image.url,
     }
 
     return render(request, 'shop/detail.html', context=context)
