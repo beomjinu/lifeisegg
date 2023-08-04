@@ -3,7 +3,7 @@ from django.urls import reverse
 
 class Product(models.Model):
     name        = models.CharField(max_length=99)
-    og_img      = models.ImageField(upload_to='', null=True, blank=True)
+    og_img      = models.ImageField(upload_to='product/', null=True, blank=True)
     price       = models.PositiveIntegerField()
     discounted  = models.PositiveIntegerField()
     description = models.TextField(null=True, blank=True)
@@ -44,7 +44,7 @@ class Option(models.Model):
 
 class Image(models.Model):
     product     = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    image       = models.ImageField(upload_to='')
+    image       = models.ImageField(upload_to='product/')
     priority    = models.IntegerField()
 
     def __str__(self):
