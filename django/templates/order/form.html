@@ -69,7 +69,7 @@
             </div>
         </div>
         <div class='mt-14'>
-            <p class='text-sm sm:text-base'>동의 사항인 <a target='_blank' href='{% url 'terms:policy' %}' class='text-blue'>이용약관</a>과 <a target='_blank' href='{% url 'terms:privacy' %}' class='text-blue'>개인정보처리방침</a>을 확인하신 후 아래 '동의 및 결제하기'를 눌러주세요.</p>
+            <p class='text-sm sm:text-base'>동의 사항인 <a target='_blank' href='{% url 'terms:page' 'policy' %}' class='text-blue'>이용약관</a>과 <a target='_blank' href='{% url 'terms:page' 'privacy' %}' class='text-blue'>개인정보처리방침</a>을 확인하신 후 아래 '동의 및 결제하기'를 눌러주세요.</p>
         </div>
         <button type='submit' class='w-full h-12 sm:h-16 mt-10 border border-blue rounded-full text-blue text-md sm:text-xl'>동의 및 결제하기</button>
     </form>
