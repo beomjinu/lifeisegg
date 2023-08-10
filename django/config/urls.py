@@ -26,6 +26,7 @@ urlpatterns = [
     path('order/', include("app.order.urls")),
     path('payment/', include('app.payment.urls')),
     path('cart/', include('app.cart.urls')),
+    path('notice/', include('app.notice.urls')),
 
     # summernote
     path('summernote/', include('django_summernote.urls')),
