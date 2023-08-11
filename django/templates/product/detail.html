@@ -23,7 +23,7 @@
                 </div>
                 <div class="flex gap-2 mt-6">
                     <img title="Freepik - Flaticon" class="w-8" src="{% static 'image/shipped.png' %}">
-                    <p class="flex items-center text-sm">무료 배송 상품입니다.</p>
+                    <p class="flex items-center text-sm">무료 배송 상품</p>
                 </div>
                 <div class='my-6 text-sm min-h-16 h-16'>
                     {{ product.description|safe }}
@@ -31,7 +31,7 @@
                 <div class="mt-12 w-full sm:w-1/2 relative cursor-pointer">
                     <p class='absolute right-2 top-[6px] z-50'>⌵</p>
                     <select onchange="select_option()" id="options" class="cursor-pointer appearance-none border border-dark text-dark bg-white text-sm rounded-lg block w-full p-2.5">
-                        <option value="NONE" selected>옵션을 선택하세요.</option>
+                        <option value="NONE" selected>옵션을 선택해주세요.</option>
                         {% for option in product.solted_options %}
                         {% if option.is_sold_out %}
                         <option value="{{ option.id }}" disabled>+{{ option.price|intcomma }}원 | {{ option.content }} (품절)</option>
@@ -46,7 +46,7 @@
                     </div>
                     <div class="flex justify-between h-12 w-full mt-4">
                         {% if product.is_sold_out %}
-                        <button class="w-full rounded-full bg-gray_2 text-white cursor-not-allowed">품절된 상품입니다.</button>
+                        <button class="w-full rounded-full bg-gray_2 text-white cursor-not-allowed">상품이 품절되었어요.</button>
                         {% else %}
                         <button onclick="buy()" class="w-[49%] rounded-full bg-dark text-white hover:bg-gray duration-500">구매하기</button>
                         <button onclick='cart()' class="w-[49%] rounded-full border border-dark hover:bg-dark hover:text-white duration-500">장바구니</button>

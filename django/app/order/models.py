@@ -35,10 +35,10 @@ class Order(models.Model):
     @property
     def status_display(self) -> str:
         return {
-            'WFP': '결제를 기다리고 있습니다.',
-            'DP': '결제가 완료되었습니다.',
-            'DS': '상품을 발송 완료하였습니다.',
-            'C': '주문이 취소되었습니다.'
+            'WFP': '결제를 기다리고 있어요.',
+            'DP': '결제가 완료되었어요.',
+            'DS': '상품 발송을 완료했어요.',
+            'C': '주문이 취소되었어요.'
         }[self.status]
     
     @property
