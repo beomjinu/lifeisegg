@@ -5,7 +5,7 @@
     <div class='flex flex-col gap-10 my-8'>
         <p class='text-4xl font-bold text-blue'>{{ order.status_display }}</p>
         <div>
-            <p class="text-xl font-bold">주문 상품</p>
+            <p class="text-xl">주문 상품</p>
             <div class="flex flex-col gap-2 mt-3">
                 {% for item in order.items.all %}
                 <div class="h-24 w-full p-4 flex flex-col gap-4 bg-gray_1 rounded-lg">
@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class='flex flex-col gap-4'>
-            <p class='text-xl font-bold'>주문 정보</p>
+            <p class='text-xl'>주문 정보</p>
             <div class=''>
                 <label class="text-sm font-medium">주문 일시</label>
                 <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.created_at|date:'Y년 m월 d일 H시 i분' }}' disabled>
@@ -50,7 +50,7 @@
             </div>
         </div>
         <div>
-            <p class='text-xl font-bold'>결제 정보</p>
+            <p class='text-xl'>결제 정보</p>
             {% if order.status != 'WFP' %}
             <div class='my-2'>
                 <label class="text-sm font-medium">결제 금액</label>
@@ -71,7 +71,7 @@
             {% endif %}
         </div>
         <div>
-            <p class='text-xl font-bold'>배송 정보</p>
+            <p class='text-xl'>배송 정보</p>
             {% if order.delivery and order.status == 'DS' %}
             <div class='my-2'>
                 <label class="text-sm font-medium">운송장 번호</label>

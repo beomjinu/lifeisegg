@@ -8,7 +8,7 @@
         {% csrf_token %}
         <div class='flex flex-col gap-10'>
             <div>
-                <p class="text-2xl font-bold">주문 상품</p>
+                <p class="text-2xl">주문 상품</p>
                 <div class="flex flex-col gap-2 mt-5">
                     {% for item in order_items %}
                     <div class="h-32 flex gap-4">
@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div>
-                <p class="text-2xl font-bold">주문자</p>
+                <p class="text-2xl">주문자</p>
                 <div class="grid gap-6 mb-6 md:grid-cols-2 mt-4">
                     <div>
                         <label for="orderer_name" class="text-sm font-medium">이름</label>
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div>
-                <p class="text-2xl font-bold">배송지</p>
+                <p class="text-2xl">배송지</p>
                 <div class="flex my-3">
                     <div class="flex items-center h-5">
                         <input onclick="same_orderer(this)" type="checkbox" class="w-4 h-4 border border-gray_3 rounded bg-gray-50">
