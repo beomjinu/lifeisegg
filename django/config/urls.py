@@ -41,6 +41,6 @@ urlpatterns = [
     path('robots.txt', lambda request: render(request, 'robots.txt', content_type='text/plain')),
 
     # naver site verification
-    path('naver19af3aceb3c4654e177ebb055319e0b3.html', lambda _: HttpResponse('naver-site-verification: naver19af3aceb3c4654e177ebb055319e0b3.html'))
+    path('https://lifeisegg.shop/naverea9d173cbeb8aac596f5da4df2b85695.html', lambda _: HttpResponse('naver-site-verification: naverea9d173cbeb8aac596f5da4df2b85695.html'))
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
