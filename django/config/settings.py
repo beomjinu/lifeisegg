@@ -205,3 +205,8 @@ LOGGING = {
         },
     }
 }
+
+SUMMERNOTE_CONFIG = {
+    'iframe': True,
+    'attachment_filesize_limit': 5 * 100 * 100 * 100, # specify the file size
+}
