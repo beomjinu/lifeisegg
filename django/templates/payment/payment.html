@@ -1,30 +1,55 @@
 {% extends 'base.html' %}
 {% load humanize %}
 {% block content %}
-<div class='w-full md:w-11/12 max-w-[480px] h-screen mx-auto mt-10 md:mt-20'>
-    <div class='flex flex-col gap-5'>
-        <p class='text-2xl'>결제하기</p>
-        <div class='flex flex-col gap-5'>
-            <div>
-                <label for="orderer_name" class="text-sm font-medium">이름</label>
-                <input type="text" id="orderer_name" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.orderer_name }}' disabled>
+<div class='w-full md:w-11/12 max-w-[720px] h-screen mx-auto'>
+    <div>
+        <p class="text-[20px] font-bold">주문 상품</p>
+        <div class="flex flex-col gap-2 mt-3">
+            {% for item in order.items.all %}
+            <div class="h-24 w-full p-4 flex flex-col gap-4 bg-gray_1 rounded-lg">
+                <div class=' rounded-lg bg-gray_1'>
+                    <div class='flex flex-col justify-center gap-2'>
+                        <p class='text-xl'>{{ item.content }}</p>
+                        <p class=''>{{ item.quantity }}개 / {{ item.total_price|intcomma }}원</p>
+                    </div>
+                </div>
             </div>
-            <div>
-                <label for="order_name" class="text-sm font-medium">결제 항목</label>
-                <input type="text" id="order_name" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.content }}' disabled>
-            </div>
-            <div>
-                <label for="amount" class="text-sm font-medium">결제 금액</label>
-                <input type="text" id="amount" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.amount|intcomma }}원' disabled>
-            </div>
+            {% endfor %}
         </div>
-        <button class='w-full h-12 rounded-full border border-blue text-blue mt-10' onclick='open_payments()'>결제창 다시 열기</button>
     </div>
+    <div id="payment-method"></div>
+    <div id="agreement"></div>
+    <button id="payment-button" class='w-full h-12 sm:h-16 border border-blue rounded-full text-blue text-md sm:text-xl'>{{ order.amount|intcomma }}원 결제하기</button>
 </div>
-<script src="https://js.tosspayments.com/v1/payment"></script>
+<script src="https://js.tosspayments.com/v1/payment-widget"></script>
 <script>
-    let client_key = '{{ toss_ck }}'
-    let payments = TossPayments(client_key)
+    const client_key = '{{ toss_ck }}'
+    const button = document.getElementById("payment-button")
+    const paymentWidget = PaymentWidget(client_key, PaymentWidget.ANONYMOUS)
+
+    paymentWidget.renderPaymentMethods(
+        "#payment-method", 
+        { value: parseInt('{{ order.amount }}') },
+        { variantKey: "DEFAULT" } 
+    )
+
+    paymentWidget.renderAgreement('#agreement')
+
+    button.addEventListener("click", () => {
+        paymentWidget.requestPayment({
+            orderId:        '{{ order.order_id }}',
+            orderName:      '{{ order.content }}',
+            successUrl:     'http://' + window.location.host + '/' + '{% url 'payment:success' %}', 
+            failUrl:        'http://' + window.location.host + '/' + '{% url 'payment:fail' %}',   
+            customerName:   '{{ order.orderer_name }}'
+        })
+    })
+
+
+
+
+    /*
+    let payment = TossPayments(client_key)
     
     function open_payments() {
         payments.requestPayment('CARD', {
@@ -38,5 +63,6 @@
     }
 
     open_payments()
+    */
 </script>
 {% endblock %}

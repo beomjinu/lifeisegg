@@ -4,6 +4,19 @@
 <div class='w-full md:w-11/12 max-w-[720px] h-full mx-auto mb-20'>
     <div class='flex flex-col gap-10 my-8'>
         <p class='text-4xl font-bold text-blue'>{{ order.status_display }}</p>
+        {% if order.status == 'WFD' %}
+        <div class='flex flex-col gap-2'>
+            <p class='text-xl my-1'>입금 정보</p>
+            <div class=''>
+                <label class="text-sm font-medium">입금하실 계좌</label>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3 text-blue" value='{{ order.payment.virtualAccount.bank }} {{ order.payment.virtualAccount.accountNumber }}' disabled>
+            </div>
+            <div class=''>
+                <label class="text-sm font-medium">입금하실 금액</label>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.totalAmount|intcomma }}원' disabled>
+            </div>
+        </div>
+        {% endif %}
         <div>
             <p class="text-xl">주문 상품</p>
             <div class="flex flex-col gap-2 mt-3">
@@ -51,7 +64,11 @@
         </div>
         <div>
             <p class='text-xl'>결제 정보</p>
-            {% if order.status != 'WFP' %}
+            {% if order.status != 'WFP' and order.status != 'WFD' %}
+            <div class='my-2'>
+                <label class="text-sm font-medium">결제 수단</label>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.method }}' disabled>
+            </div>
             <div class='my-2'>
                 <label class="text-sm font-medium">결제 금액</label>
                 {% if order.status == 'C' %}

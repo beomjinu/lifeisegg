@@ -16,10 +16,13 @@ class Order(models.Model):
     delivery         = models.CharField(max_length=99, null=True, blank=True)
     
     status_choices   = (
-        ('WFP', 'WAITING_FOR_PAYMENT'),
-        ('DP', 'DONE_PAYMENT'),
-        ('DS', 'DONE_SEND'),
-        ('C', 'CANCLED'),
+        ('WFP', 'WAITING_FOR_PAYMENT'), # 결제 대기중
+        ('WFD', 'WAITING_FOR_DEPOSIT'), # 입금 대기중
+        ('DP', 'DONE_PAYMENT'), # 결제 완료
+        ('DS', 'DONE_SEND'), # 발송 완료
+        ('C', 'CANCLED'), # 결제 취소 (환불)
+        ('A', 'ABORTED'), # 결제 실패
+        ('E', 'EXPIRED') # 
     )
 
     status           = models.CharField(max_length=99, choices=status_choices)
@@ -36,9 +39,11 @@ class Order(models.Model):
     def status_display(self) -> str:
         return {
             'WFP': '결제를 기다리고 있어요.',
+            'WFD': '입금을 완료해주세요.',
             'DP': '결제가 완료되었어요.',
             'DS': '상품 발송을 완료했어요.',
-            'C': '주문이 취소되었어요.'
+            'C': '주문이 취소되었어요.',
+            'A': '결제를 실패했어요.',
         }[self.status]
     
     @property
@@ -47,7 +52,29 @@ class Order(models.Model):
         response = toss.inquiry(order_id=self.order_id)
         
         data = response.json()
-        data['approvedAt'] = datetime.strptime(data['approvedAt'], '%Y-%m-%dT%H:%M:%S%z')
+
+        if data['method'] == '가상계좌' and data['status'] == 'WAITING_FOR_DEPOSIT':
+            data['virtualAccount']['bank'] = {
+                '32': '부산',
+                '37': '전북',
+                '07': '수협',
+                '20': '우리',
+                '88': '신한',
+                '71': '우체국',
+                '03': '기업',
+                '31': '대구',
+                '11': '농협',
+                '45': '새마을',
+                '39': '경남',
+                '34': '광주',
+                '04': '국민',
+                '81': '하나',
+                '89': '케이',
+            }[data['virtualAccount']['bankCode']]
+
+            data['virtualAccount']['accountNumber'] = data['virtualAccount']['accountNumber'][1:]
+        else:
+            data['approvedAt'] = datetime.strptime(data['approvedAt'], '%Y-%m-%dT%H:%M:%S%z')
 
         return data
 
