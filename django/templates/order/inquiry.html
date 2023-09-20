@@ -65,17 +65,21 @@
         <div>
             <p class='text-xl'>결제 정보</p>
             {% if order.status != 'WFP' and order.status != 'WFD' %}
-            <div class='my-2'>
-                <label class="text-sm font-medium">결제 수단</label>
-                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.method }}' disabled>
-            </div>
-            <div class='my-2'>
-                <label class="text-sm font-medium">결제 금액</label>
-                {% if order.status == 'C' %}
-                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.totalAmount|intcomma }}원 (환불 완료)' disabled>
-                {% else %}
-                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.totalAmount|intcomma }}원' disabled>
-                {% endif %}
+            <div>
+                <div class='gap-4 grid grid-cols-2 my-2'>
+                    <div>
+                        <label class="text-sm font-medium">결제 수단</label>
+                        <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.method }}' disabled>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium">결제 금액</label>
+                        {% if order.status == 'C' %}
+                        <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.totalAmount|intcomma }}원 (환불 완료)' disabled>
+                        {% else %}
+                        <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.totalAmount|intcomma }}원' disabled>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
             <div class='my-2'>
                 <label class="text-sm font-medium">결제 일시</label>
