@@ -3,10 +3,13 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
 from app.order.models import Order
+from app.payment.models import Payment
 
 from utils.alimtalk import Message
 from utils.tosspayments import TossPayments
 from utils.tools import get_client_ip
+
+import base64
 
 import logging, json
 
@@ -32,7 +35,7 @@ def success(request):
     if order.amount != int(request.GET.get('amount')):
         logger.error(f'ip: {get_client_ip(request)} order_id:{order.order_id} 사용자가 변조를 시도하였습니다.')
 
-        return HttpResponse('요청한 결제 금액과 실제 결제 금액이 다릅니다.')
+        return HttpResponse('오류가 발생하였습니다. 우측 하단 채널톡 버튼을 눌러 문의 바랍니다.')
     
     payload = {
         'orderId': request.GET.get('orderId'),
@@ -41,38 +44,58 @@ def success(request):
     }
 
     toss = TossPayments()
-    toss_response = toss.success(payload=payload)
+    response = toss.success(payload=payload)
     
-    if not 200 <= toss_response.status_code < 300:
-        logger.critical(f'order_id: {order.order_id} 토스페이먼츠 결제 승인 오류 data: {toss_response.json()}')
+    if not 200 <= response.status_code < 300:
+        logger.critical(f'토스페이먼츠 결제 승인 오류 data: {response.json()}')
 
-        return HttpResponse(f'오류가 발생하였습니다. data: {toss_response.json()}')
+        return HttpResponse('오류가 발생하였습니다. 우측 하단 채널톡 버튼을 눌러 문의 바랍니다.')
     
-    if toss_response.json()['method'] == '가상계좌':
-        order.status = 'WFD'
-
-        # 후에 가상계좌 입금 안내에 대한 알림톡 추가
-
-    else:
+    payment         = Payment()
+    payment.order   = order
+    payment.data    = base64.b64encode(json.dumps(response.json()).encode('utf-8')).decode('utf-8')
+    payment.save()
+    
+    if payment.status == 'WAITING_FOR_DEPOSIT':
+        order.status = 'WAITING_FOR_DEPOSIT'
+        
         message = Message()
         message.create_send_data(
-                {
-                    "to": order.orderer_number,
-                    "template": "주문접수",
+            {
+                "to": order.orderer_number,
+                "template": "입금요청",
 
-                    "var": {
-                        "#{amount}": format(order.amount, ",") + "원",
-                        "#{order_id}": order.order_id
-                    }
+                "var": {
+                    '#{order_id}': order.order_id,
+                    '#{amount}': format(order.amount, ',') + '원',
+                    '#{account}': order.payment.virtual_account,
+                    '#{due_date}': order.payment.due_date.strftime('%Y년 %m월 %d일 %H시 %M분'),
                 }
-            )
-        
-        alimtalk_response = message.send()
+            }
+        )
+        message.send()
 
-        order.status = 'DP'
-    
-        if not 200 <= alimtalk_response.status_code < 300:
-            logger.critical(f'order_id: {order.order_id} 알림톡 발송 오류 data: {alimtalk_response.json()}')
+    elif payment.status == 'DONE':
+        order.status = 'DONE_PAYMENT'
+        
+        message = Message()
+        message.create_send_data(
+            {
+                "to": order.orderer_number,
+                "template": "주문접수",
+
+                "var": {
+                    "#{amount}": format(order.amount, ',') + '원',
+                    "#{order_id}": order.order_id
+                }
+            }
+        )
+        message.send()
+
+    else:
+        logger.critical(f'토스페이먼츠 결제 승인 오류 data: {response.json()}')
+
+        return HttpResponse('오류가 발생하였습니다. 우측 하단 채널톡 버튼을 눌러 문의 바랍니다.')
     
     order.save()
 
@@ -86,34 +109,57 @@ def hook(request):
     if request.method == 'POST':
         data = json.loads(request.body)
 
-        if data['eventType'] == 'PAYMENT_STATUS_CHANGED':
-            if data['data']['status'] == 'DONE':
-                order = get_object_or_404(Order, order_id=data['data']['orderId'])
+        order = Order.objects.get(order_id=data['orderId'])
+        if data['secret'] == order.payment.get_data()['secret']:
+            if data['status'] == 'DONE':
+                order.status = 'DONE_PAYMENT'
+                order.save()
+
+                payment = Payment.objects.get(order=order)
+                payment.update_data()
                 
                 message = Message()
                 message.create_send_data(
-                        {
-                            "to": order.orderer_number,
-                            "template": "주문접수",
+                    {
+                        "to": order.orderer_number,
+                        "template": "주문접수",
 
-                            "var": {
-                                "#{amount}": format(order.amount, ",") + "원",
-                                "#{order_id}": order.order_id
-                            }
+                        "var": {
+                            "#{amount}": format(order.amount, ',') + '원',
+                            "#{order_id}": order.order_id,
                         }
-                    )
-                
-                alimtalk_response = message.send()
-                
-                if not 200 <= alimtalk_response.status_code < 300:
-                    logger.critical(f'order_id: {order.order_id} 알림톡 발송 오류 data: {alimtalk_response.json()}')
+                    }
+                )
+                message.send()
 
-                order.status = 'DP'
+
+            elif data['status'] == 'WAITING_FOR_DEPOSIT':
+                order.status = 'WAITING_FOR_DEPOSIT'
                 order.save()
-                
+
+                payment = Payment.objects.get(order=order)
+                payment.update_data()
+
+                message = Message()
+                message.create_send_data(
+                    {
+                        "to": order.orderer_number,
+                        "template": "재입금요청",
+
+                        "var": {
+                            '#{order_id}': order.order_id,
+                            '#{amount}': format(order.amount, ',') + '원',
+                            '#{account}': order.payment.virtual_account,
+                            '#{due_date}': order.payment.due_date.strftime('%Y년 %m월 %d일 %H시 %M분'),
+                        }
+                    }
+                )
+                message.send()
+            else:
+                return HttpResponse(status=422)
+        else:
+            return HttpResponse(status=401)
+
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=405)
-
-
-    

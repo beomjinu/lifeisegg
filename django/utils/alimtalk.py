@@ -20,7 +20,10 @@ class Message:
 
         self.templates = {
             '주문접수': 'KA01TP230701162116367VjEPEehkl6I',
-            '발송완료': 'KA01TP230708122917670lqAsmIPnu7C'
+            '발송완료': 'KA01TP230708122917670lqAsmIPnu7C',
+            '입금요청': 'KA01TP230924104434717hRcJXTwEOKT',
+            '재입금요청': 'KA01TP230924104332022LB6zegVF47h',
+            '주문취소': 'KA01TP230924105546980gOo5BjJNnxm',
         }        
 
     def create_send_data(self, data):

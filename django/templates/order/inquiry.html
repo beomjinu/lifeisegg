@@ -4,16 +4,20 @@
 <div class='w-full md:w-11/12 max-w-[720px] h-full mx-auto mb-20'>
     <div class='flex flex-col gap-10 my-8'>
         <p class='text-4xl font-bold text-blue'>{{ order.status_display }}</p>
-        {% if order.status == 'WFD' %}
+        {% if order.status == 'WAITING_FOR_DEPOSIT' %}
         <div class='flex flex-col gap-2'>
             <p class='text-xl my-1'>입금 정보</p>
             <div class=''>
                 <label class="text-sm font-medium">입금하실 계좌</label>
-                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3 text-blue" value='{{ order.payment.virtualAccount.bank }} {{ order.payment.virtualAccount.accountNumber }}' disabled>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3 text-blue" value='{{ order.payment.virtual_account }}' disabled>
             </div>
             <div class=''>
                 <label class="text-sm font-medium">입금하실 금액</label>
-                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.totalAmount|intcomma }}원' disabled>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.amount|intcomma }}원' disabled>
+            </div>
+            <div class=''>
+                <label class="text-sm font-medium">입금 기한</label>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.due_date|date:'Y년 m월 d일 H시 i분' }}' disabled>
             </div>
         </div>
         {% endif %}
@@ -64,7 +68,7 @@
         </div>
         <div>
             <p class='text-xl'>결제 정보</p>
-            {% if order.status != 'WFP' and order.status != 'WFD' %}
+            {% if order.status != 'WAITING_FOR_PAYMENT' and order.status != 'WAITING_FOR_DEPOSIT' %}
             <div>
                 <div class='gap-4 grid grid-cols-2 my-2'>
                     <div>
@@ -73,17 +77,17 @@
                     </div>
                     <div>
                         <label class="text-sm font-medium">결제 금액</label>
-                        {% if order.status == 'C' %}
-                        <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.totalAmount|intcomma }}원 (환불 완료)' disabled>
+                        {% if order.status == 'CANCELED' %}
+                        <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.amount|intcomma }}원 (환불 완료)' disabled>
                         {% else %}
-                        <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.totalAmount|intcomma }}원' disabled>
+                        <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.amount|intcomma }}원' disabled>
                         {% endif %}
                     </div>
                 </div>
             </div>
             <div class='my-2'>
                 <label class="text-sm font-medium">결제 일시</label>
-                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.approvedAt|date:'Y년 m월 d일 H시 i분' }}' disabled>
+                <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.payment.approved_at|date:'Y년 m월 d일 H시 i분' }}' disabled>
             </div>
             {% else %}
             <div class='my-2'>
@@ -93,7 +97,7 @@
         </div>
         <div>
             <p class='text-xl'>배송 정보</p>
-            {% if order.delivery and order.status == 'DS' %}
+            {% if order.delivery and order.status == 'DONE_SEND' %}
             <div class='my-2'>
                 <label class="text-sm font-medium">운송장 번호</label>
                 <input type="text" class="h-12 bg-gray_1 rounded-lg w-full p-3" value='{{ order.delivery }}' disabled>
