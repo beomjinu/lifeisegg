@@ -35,7 +35,7 @@ def success(request):
     if order.amount != int(request.GET.get('amount')):
         logger.error(f'ip: {get_client_ip(request)} order_id:{order.order_id} 사용자가 변조를 시도하였습니다.')
 
-        return HttpResponse('오류가 발생하였습니다. 우측 하단 채널톡 버튼을 눌러 문의 바랍니다.')
+        return HttpResponse('오류가 발생하였습니다. 쇼핑몰로 다시 돌아가 우측 하단 채널톡 버튼을 눌러 문의 바랍니다.')
     
     payload = {
         'orderId': request.GET.get('orderId'),
@@ -49,7 +49,7 @@ def success(request):
     if not 200 <= response.status_code < 300:
         logger.critical(f'토스페이먼츠 결제 승인 오류 data: {response.json()}')
 
-        return HttpResponse('오류가 발생하였습니다. 우측 하단 채널톡 버튼을 눌러 문의 바랍니다.')
+        return HttpResponse('오류가 발생하였습니다. 쇼핑몰로 다시 돌아가 우측 하단 채널톡 버튼을 눌러 문의 바랍니다.')
     
     payment         = Payment()
     payment.order   = order
@@ -95,7 +95,7 @@ def success(request):
     else:
         logger.critical(f'토스페이먼츠 결제 승인 오류 data: {response.json()}')
 
-        return HttpResponse('오류가 발생하였습니다. 우측 하단 채널톡 버튼을 눌러 문의 바랍니다.')
+        return HttpResponse('오류가 발생하였습니다. 쇼핑몰로 다시 돌아가 우측 하단 채널톡 버튼을 눌러 문의 바랍니다.')
     
     order.save()
 
