@@ -43,7 +43,7 @@ class Payment(models.Model):
             '71': '우체국예금보험',
             '37': '전북은행',
             '81': '하나은행'
-        }[self.get_data()['virtualAccount']['bankCode']] + ' ' + self.get_data()['virtualAccount']['accountNumber'][1:]
+        }[self.get_data()['virtualAccount']['bankCode']] + ' ' + self.get_data()['virtualAccount']['accountNumber']
     
     @property
     def approved_at(self) -> datetime:
