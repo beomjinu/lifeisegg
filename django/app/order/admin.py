@@ -3,7 +3,9 @@ from .models import Order, Item
 from app.payment.models import Payment
 from utils.alimtalk import Message
 from utils.tosspayments import TossPayments
-import base64
+import logging
+
+logger = logging.getLogger(__name__)
 
 class ItemInline(admin.TabularInline):
     model = Item
@@ -65,3 +67,5 @@ class OrderAdmin(admin.ModelAdmin):
                         }
                     )
                     message.send()
+                else:
+                    logger.critical(f'토스페이먼츠 결제 취소 오류 data: {response.json()}')
