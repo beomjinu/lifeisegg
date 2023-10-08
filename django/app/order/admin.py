@@ -50,7 +50,7 @@ class OrderAdmin(admin.ModelAdmin):
                     order.save()
 
                     payment = Payment.objects.get(order=order)
-                    payment.data = base64.b64decode(response.body.encode('utf-8')).decode('utf-8')
+                    payment.update_data()
 
                     message = Message()
                     message.create_send_data(
