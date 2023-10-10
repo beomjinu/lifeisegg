@@ -62,7 +62,7 @@ class OrderAdmin(admin.ModelAdmin):
 
                             "var": {
                                 "#{order_id}": order.order_id,
-                                "#{amount}": order.amount,
+                                "#{amount}": format(order.amount, ','),
                             }
                         }
                     )
