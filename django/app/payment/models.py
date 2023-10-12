@@ -1,31 +1,37 @@
 from django.db import models
 from app.order.models import Order
 from datetime import datetime
-
 from utils.tosspayments import TossPayments
+import base64
+import json
 
-import base64, json
 
 class Payment(models.Model):
     order = models.OneToOneField(Order, related_name='payment', on_delete=models.CASCADE)
-    data  = models.TextField()
+    data = models.TextField()
 
     def get_data(self) -> dict:
         return json.loads(base64.b64decode(self.data.encode('utf-8')).decode('utf-8'))
-    
-    def update_data(self) -> dict:
+
+    def update_data(self):
         tosspayments = TossPayments()
-        self.data = base64.b64encode(json.dumps(tosspayments.inquiry(order_id=self.order.order_id).json()).encode('utf-8')).decode('utf-8')
+
+        self.data = base64.b64encode(
+            json.dumps(
+                tosspayments.inquiry(order_id=self.order.order_id).json()
+            ).encode('utf-8')
+        ).decode('utf-8')
+
         self.save()
 
     @property
     def status(self) -> str:
         return self.get_data()['status']
-    
+
     @property
     def method(self) -> str:
         return self.get_data()['method']
-    
+
     @property
     def virtual_account(self) -> str:
         return {
@@ -44,11 +50,26 @@ class Payment(models.Model):
             '37': '전북은행',
             '81': '하나은행'
         }[self.get_data()['virtualAccount']['bankCode']] + ' ' + self.get_data()['virtualAccount']['accountNumber']
-    
+
     @property
     def approved_at(self) -> datetime:
         return datetime.fromisoformat(self.get_data()['approvedAt'])
-    
+
     @property
     def due_date(self) -> datetime:
         return datetime.fromisoformat(self.get_data()['virtualAccount']['dueDate'])
+
+
+class RefundAccount(models.Model):
+    payment = models.OneToOneField(Payment, related_name='refund_account', on_delete=models.CASCADE)
+    bankCode = models.CharField(max_length=2)
+    accountNumber = models.CharField(max_length=20)
+    holderName = models.CharField(max_length=60)
+
+    def convert_json_for_tosspayment(self) -> dict:
+        return {
+            'bank': self.bankCode,
+            'accountNumber': self.accountNumber,
+            'holderName': self.holderName
+        }
+    

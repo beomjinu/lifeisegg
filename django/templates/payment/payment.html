@@ -44,25 +44,5 @@
             customerName:   '{{ order.orderer_name }}'
         })
     })
-
-
-
-
-    /*
-    let payment = TossPayments(client_key)
-    
-    function open_payments() {
-        payments.requestPayment('CARD', {
-            amount: parseInt('{{ order.amount }}'),
-            orderId: '{{ order.order_id }}',
-            orderName: '{{ order.content }}',
-            customerName: '{{ order.orderer_name }}',
-            successUrl: 'http://' + window.location.host + '/' + '{% url 'payment:success' %}',
-            failUrl: 'http://' + window.location.host + '/' + '{% url 'payment:fail' %}',
-        })
-    }
-
-    open_payments()
-    */
 </script>
 {% endblock %}

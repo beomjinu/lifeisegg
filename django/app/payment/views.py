@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
 from app.order.models import Order
-from app.payment.models import Payment
+from app.payment.models import Payment, RefundAccount
 
 from utils.alimtalk import Message
 from utils.tosspayments import TossPayments
@@ -14,6 +14,7 @@ import base64
 import logging, json
 
 logger = logging.getLogger(__name__)
+
 
 def open(request, order_id):
     order = get_object_or_404(Order, order_id=order_id)
@@ -28,6 +29,7 @@ def open(request, order_id):
     }
 
     return render(request, 'payment/payment.html', context)
+
 
 def success(request):
     order = get_object_or_404(Order, order_id=request.GET.get('orderId'))
@@ -51,14 +53,21 @@ def success(request):
 
         return HttpResponse('오류가 발생하였습니다. 쇼핑몰로 다시 돌아가 우측 하단 채널톡 버튼을 눌러 문의 바랍니다.')
     
-    payment         = Payment()
-    payment.order   = order
-    payment.data    = base64.b64encode(json.dumps(response.json()).encode('utf-8')).decode('utf-8')
+    payment = Payment()
+    payment.order = order
+    payment.data = base64.b64encode(json.dumps(response.json()).encode('utf-8')).decode('utf-8')
     payment.save()
     
     if payment.status == 'WAITING_FOR_DEPOSIT':
         order.status = 'WAITING_FOR_DEPOSIT'
         
+        refundAccount: RefundAccount = RefundAccount()
+        refundAccount.payment = payment
+        refundAccount.bankCode = payment.get_data()['virtualAccount']['refundReceiveAccount']['bankCode']
+        refundAccount.accountNumber = payment.get_data()['virtualAccount']['refundReceiveAccount']['accountNumber']
+        refundAccount.holderName = payment.get_data()['virtualAccount']['refundReceiveAccount']['holderName']
+        refundAccount.save()
+
         message = Message()
         message.create_send_data(
             {
@@ -101,8 +110,10 @@ def success(request):
 
     return redirect('order:inquiry', order_id=order.order_id)
 
+
 def fail(request):
     return HttpResponse(request.GET.get('code') + ':' + request.GET.get('message') + ':' + request.GET.get('orderId'))
+
 
 @csrf_exempt
 def hook(request):
@@ -110,55 +121,52 @@ def hook(request):
         data = json.loads(request.body)
 
         order = Order.objects.get(order_id=data['orderId'])
-        if data['secret'] == order.payment.get_data()['secret']:
-            if data['status'] == 'DONE':
-                order.status = 'DONE_PAYMENT'
-                order.save()
+        if data['status'] == 'DONE':
+            order.status = 'DONE_PAYMENT'
+            order.save()
 
-                payment = Payment.objects.get(order=order)
-                payment.update_data()
-                
-                message = Message()
-                message.create_send_data(
-                    {
-                        "to": order.orderer_number,
-                        "template": "주문접수",
+            payment = Payment.objects.get(order=order)
+            payment.update_data()
 
-                        "var": {
-                            "#{amount}": format(order.amount, ',') + '원',
-                            "#{order_id}": order.order_id,
-                        }
+            message = Message()
+            message.create_send_data(
+                {
+                    "to": order.orderer_number,
+                    "template": "주문접수",
+
+                    "var": {
+                        "#{amount}": format(order.amount, ',') + '원',
+                        "#{order_id}": order.order_id,
                     }
-                )
-                message.send()
+                }
+            )
+            message.send()
 
+        elif data['status'] == 'WAITING_FOR_DEPOSIT':
+            order.status = 'WAITING_FOR_DEPOSIT'
+            order.save()
 
-            elif data['status'] == 'WAITING_FOR_DEPOSIT':
-                order.status = 'WAITING_FOR_DEPOSIT'
-                order.save()
+            payment = Payment.objects.get(order=order)
+            payment.update_data()
 
-                payment = Payment.objects.get(order=order)
-                payment.update_data()
+            message = Message()
+            message.create_send_data(
+                {
+                    "to": order.orderer_number,
+                    "template": "재입금요청",
 
-                message = Message()
-                message.create_send_data(
-                    {
-                        "to": order.orderer_number,
-                        "template": "재입금요청",
-
-                        "var": {
-                            '#{order_id}': order.order_id,
-                            '#{amount}': format(order.amount, ',') + '원',
-                            '#{account}': order.payment.virtual_account,
-                            '#{due_date}': order.payment.due_date.strftime('%Y년 %m월 %d일 %H시 %M분'),
-                        }
+                    "var": {
+                        '#{order_id}': order.order_id,
+                        '#{amount}': format(order.amount, ',') + '원',
+                        '#{account}': order.payment.virtual_account,
+                        '#{due_date}': order.payment.due_date.strftime('%Y년 %m월 %d일 %H시 %M분'),
                     }
-                )
-                message.send()
-            else:
-                return HttpResponse(status=422)
+                }
+            )
+            message.send()
+
         else:
-            return HttpResponse(status=401)
+            return HttpResponse(status=422)
 
         return HttpResponse(status=200)
     else:
