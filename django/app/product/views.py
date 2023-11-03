@@ -36,8 +36,8 @@ def enginePage(request, name: str):
 
         for product in products:
             data.append([
+                product.id,
                 product.name if not (n := product.naver_name) else n,
-                product.name,
                 str(product.discounted),
                 str(product.price),
                 f'{request.scheme}://{request.get_host()}' + reverse('product:detail', kwargs={'product_id': product.id}),
