@@ -36,7 +36,7 @@ def enginePage(request, name: str):
 
         for product in products:
             data.append([
-                product.id,
+                str(product.id),
                 product.name if not (n := product.naver_name) else n,
                 str(product.discounted),
                 str(product.price),
