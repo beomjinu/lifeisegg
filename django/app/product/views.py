@@ -36,7 +36,7 @@ def enginePage(request, name: str):
 
         for product in products:
             data.append([
-                str(product.id),
+                product.name if not (n := product.naver_name) else n,
                 product.name,
                 str(product.discounted),
                 str(product.price),
@@ -48,8 +48,6 @@ def enginePage(request, name: str):
                 '0',
                 '오늘출발^20:00^택배^CJ대한통운^N^N^4000^4000^^^토요일|일요일^',
             ])
-
         tsv = '\n'.join(['\t'.join(value) for value in data])
-        print(tsv)
 
         return HttpResponse(tsv, content_type='text/plain; charset=utf-8')

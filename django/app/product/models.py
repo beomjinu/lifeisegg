@@ -3,6 +3,7 @@ from django.urls import reverse
 
 class Product(models.Model):
     name        = models.CharField(max_length=99)
+    naver_name  = models.CharField(max_length=99, null=True)
     price       = models.PositiveIntegerField()
     discounted  = models.PositiveIntegerField()
     description = models.TextField(null=True, blank=True)
