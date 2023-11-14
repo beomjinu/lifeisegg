@@ -208,5 +208,8 @@ LOGGING = {
 
 SUMMERNOTE_CONFIG = {
     'iframe': True,
-    'attachment_filesize_limit': 5 * 100 * 100 * 100, # specify the file size
+    'attachment_filesize_limit': 50 * 1024 * 1024  # specify the file size
 }
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024
+FILE_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024
